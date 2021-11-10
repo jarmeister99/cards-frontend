@@ -1,24 +1,29 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { ICard } from './components/Card';
+import CardGallery from './components/CardGallery';
 
 function App() {
+  const cards: ICard[] = [
+    {
+      title: 'Knowledge Base',
+      content: 'Contains code snippets, technical articles, and blog posts related to various technologies' 
+    },
+    {
+      title: 'Magic of CSS',
+      content: 'A visual tutorial of many CSS concepts' 
+    },
+    {
+      title: 'Styled-Components Getting Started Guide',
+      content: 'A first-party beginner\'s tutorial to the styled-components library' 
+    },
+    {
+      title: 'Basic Concepts of Flexbox',
+      content: 'A tutorial from mozilla that explains how CSS flexbox works'
+    },
+  ] 
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <CardGallery cards={cards}/>
     </div>
   );
 }
