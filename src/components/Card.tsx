@@ -12,15 +12,10 @@ const CardContainer = styled.div`
     width: 20%;
     border: 3px solid black;
     padding: 1em;
-    // border-radius: 10px;
+    border-radius: 10px;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     margin: 1%;
     animation-fill-mode: forward;
-    // transition: transform 750ms;
-    // :hover {
-    //     transition: transform 750ms;
-    //     transform: rotateY(180deg);
-    // }
 
 `;
 const TitleContainer = styled.div`
@@ -45,51 +40,62 @@ const ContentContainer = styled.div`
 `;
 
 const Card: React.FC<ICard> = (props: ICard): JSX.Element => {
-    const [flipped, setFlipped]: [Boolean, Dispatch<SetStateAction<Boolean>>] = useState<Boolean>(false)
-    const [animationRunning, setAnimationRunning]: [Boolean, Dispatch<SetStateAction<Boolean>>] = useState<Boolean>(false)
+    const [flipped, setFlipped]: [Boolean, Dispatch<SetStateAction<Boolean>>] = useState<Boolean>(false);
+    const [animationRunning, setAnimationRunning]: [Boolean, Dispatch<SetStateAction<Boolean>>] = useState<Boolean>(false);
+
+    const hovering = useRef<Boolean>(false);
     const cardContainer = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         cardContainer.current?.addEventListener('animationend', () => {
             setAnimationRunning(false);
+            // if the animation has ended and we are still hovering
+            if (hovering.current) {
+                setFlipped(true);
+            }
+            // if we are no longer hovering
+            else {
+                setFlipped(false);
+                // switch animation states
+                cardContainer.current?.classList.add('rotateOutwards');
+                cardContainer.current?.classList.remove('rotateInwards');
+            }
         });
         cardContainer.current?.addEventListener('animationstart', () => {
             setAnimationRunning(true);
         });
     }, [])
 
-    const mouseThresholdHandler = (e: SyntheticEvent) => {
-        if (flipped && !animationRunning){
+    const mouseEnterHandler = (e: SyntheticEvent) => {
+        hovering.current = true;
+        // if we are not currently in an animation
+        if (!animationRunning) {
+            // switch animation states
             cardContainer.current?.classList.add('rotateInwards');
             cardContainer.current?.classList.remove('rotateOutwards');
-            setFlipped(!flipped);
         }
-        else if (!flipped && !animationRunning){
+    };
+    const mouseLeaveHandler = (e: SyntheticEvent) => {
+        hovering.current = false;
+        // if we are not currently in an animation
+        if (!animationRunning) {
+            // switch animation states
             cardContainer.current?.classList.add('rotateOutwards');
             cardContainer.current?.classList.remove('rotateInwards');
-            setFlipped(!flipped);
         }
-    }
+    };
 
-    if (!flipped) {
-        return (
-            <CardContainer ref={cardContainer} onMouseEnter={mouseThresholdHandler}>
-                <TitleContainer><TitleSpan>{props.title}</TitleSpan></TitleContainer>
-                <ContentContainer>
-                    {props.content}
-                </ContentContainer>
-            </CardContainer>
-        )
-    }
-    else {
-        return (
-            <CardContainer ref={cardContainer} onMouseLeave={mouseThresholdHandler}>
-                <ContentContainer>
-                    Flipped: {flipped.toString()}
-                </ContentContainer>
-            </CardContainer>
-        )
-    }
+    return (
+        <CardContainer ref={cardContainer} onMouseEnter={mouseEnterHandler} onMouseLeave={mouseLeaveHandler}>
+            <TitleContainer><TitleSpan>{props.title}</TitleSpan></TitleContainer>
+            <ContentContainer>
+                {!flipped && props.content}
+                {flipped && 'foo'}
+            </ContentContainer>
+        </CardContainer>
+
+    )
+
 }
 
 export default Card;
