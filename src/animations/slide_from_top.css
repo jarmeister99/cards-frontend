@@ -1,0 +1,12 @@
+.slideFromTop {
+    animation: slideFromTop 400ms normal ease-out;
+    overflow: hidden;
+}
+@keyframes slideFromTop {
+    from {
+        transform: translateY(-200%);
+    }
+    to {
+        transform: translateY(0%);
+    }
+}
