@@ -81,7 +81,6 @@ const Card: React.FC<ICard> = (props: ICard): JSX.Element => {
         }
     };
     const mouseLeaveHandler = (e: SyntheticEvent) => {
-        console.log("foooo");
         hovering.current = false;
         // if we are not currently in an animation
         if (!animationRunning) {
