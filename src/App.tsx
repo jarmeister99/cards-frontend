@@ -10,7 +10,8 @@ function App() {
     },
     {
       title: 'Magic of CSS',
-      content: 'A visual tutorial of many CSS concepts' 
+      content: 'A visual tutorial of many CSS concepts',
+      link: 'https://adamschwartz.co/magic-of-css/'
     },
     {
       title: 'Styled-Components Getting Started Guide',

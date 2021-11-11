@@ -6,6 +6,7 @@ import '../animations/rotateY.css';
 export interface ICard {
     title: string;
     content: string;
+    link?: string;
 };
 
 const CardContainer = styled.div`
@@ -16,6 +17,9 @@ const CardContainer = styled.div`
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     margin: 1%;
     animation-fill-mode: forward;
+    :hover {
+        cursor: pointer;
+    }
 
 `;
 const TitleContainer = styled.div`
@@ -84,16 +88,19 @@ const Card: React.FC<ICard> = (props: ICard): JSX.Element => {
             cardContainer.current?.classList.remove('rotateInwards');
         }
     };
+    const clickHandler = (e: SyntheticEvent) => {
+        console.log(props.link)
+        window.location.href = props.link || '/';
+    }
 
     return (
-        <CardContainer ref={cardContainer} onMouseEnter={mouseEnterHandler} onMouseLeave={mouseLeaveHandler}>
+        <CardContainer ref={cardContainer} onMouseEnter={mouseEnterHandler} onMouseLeave={mouseLeaveHandler} onClick={clickHandler}>
             <TitleContainer><TitleSpan>{props.title}</TitleSpan></TitleContainer>
             <ContentContainer>
                 {!flipped && props.content}
                 {flipped && 'foo'}
             </ContentContainer>
         </CardContainer>
-
     )
 
 }
