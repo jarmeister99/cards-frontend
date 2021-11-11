@@ -56,6 +56,12 @@ const Card: React.FC<ICard> = (props: ICard): JSX.Element => {
     const animationRunning = useRef<Boolean>(false);
     const [flipped, setFlipped] = useState<Boolean>(false);
     const flippedRef = useRef<Boolean>(false);
+    const offPage = useRef<Boolean>(false);
+
+    useEffect(() => {
+        document.body.addEventListener('mouseleave', e => offPage.current = true);
+        document.body.addEventListener('mouseenter', e => offPage.current = false);
+    }, [])
 
     const flip = () => {
         // switch animation states
@@ -107,6 +113,12 @@ const Card: React.FC<ICard> = (props: ICard): JSX.Element => {
             if (flippedRef.current) {
                 // is the point not in the box?
                 if (!((x >= domRect.x && x <= domRect.x + domRect.width) && (y >= domRect.y && y <= domRect.y + domRect.height))) {
+                    // then let's unflip ourselves
+                    clearAnimation();
+                    unflip();
+                }
+                // or if we moved offpage for some strange reason
+                else if (offPage.current){
                     // then let's unflip ourselves
                     clearAnimation();
                     unflip();
