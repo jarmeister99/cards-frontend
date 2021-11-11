@@ -49,19 +49,22 @@ const ContentContainer = styled.div`
 `;
 
 const Card: React.FC<ICard> = (props: ICard): JSX.Element => {
-    const [animationRunning, setAnimationRunning]: [Boolean, Dispatch<SetStateAction<Boolean>>] = useState<Boolean>(false);
 
     const cardContainer = useRef<HTMLDivElement>(null);
     const mousePosition = useRef<Point>({ x: 0, y: 0 });
-    const flipped = useRef<Boolean>(false);
+    const animationRunning = useRef<Boolean>(false);
+    const [flipped, setFlipped] = useState<Boolean>(false);
+    const flippedRef = useRef<Boolean>(false);
 
     const flip = () => {
+        console.log('Flipping')
         // switch animation states
         cardContainer.current?.classList.add('rotateInwards');
         cardContainer.current?.classList.remove('rotateOutwards');
 
-        flipped.current = true;
-        setAnimationRunning(true);
+        setFlipped(true);
+        flippedRef.current = true
+        animationRunning.current = true;
 
         // start tracking mousePos()
         document.body.addEventListener('mousemove', trackMousePos)
@@ -69,11 +72,13 @@ const Card: React.FC<ICard> = (props: ICard): JSX.Element => {
         cardContainer.current?.addEventListener('animationend', animationEndHandler);
     }
     const unflip = () => {
+        console.log('Unflipping')
         cardContainer.current?.classList.add('rotateOutwards');
         cardContainer.current?.classList.remove('rotateInwards');
 
-        flipped.current = false;
-        setAnimationRunning(true);
+        setFlipped(false);
+        flippedRef.current = false;
+        animationRunning.current = true;
 
         // start tracking mousePos()
         document.body.addEventListener('mousemove', trackMousePos)
@@ -82,7 +87,7 @@ const Card: React.FC<ICard> = (props: ICard): JSX.Element => {
     }
     const clearAnimation = () => {
         // no longer animating
-        setAnimationRunning(false);
+        animationRunning.current = false;
 
         // disable handler once it has triggered once
         cardContainer.current?.removeEventListener('animationend', animationEndHandler);
@@ -100,10 +105,11 @@ const Card: React.FC<ICard> = (props: ICard): JSX.Element => {
 
         if (domRect !== undefined) { // we love typescript
             // if we just finished a flip, we better be in the box
-            if (flipped.current) {
+            if (flippedRef.current) {
                 // is the point not in the box?
                 if (!((x >= domRect.x && x <= domRect.x + domRect.width) && (y >= domRect.y && y <= domRect.y + domRect.height))) {
                     // then let's unflip ourselves
+                    clearAnimation();
                     unflip();
                 }
                 // is the point in the box?
@@ -117,6 +123,7 @@ const Card: React.FC<ICard> = (props: ICard): JSX.Element => {
                 // is the point in the box?
                 if ((x >= domRect.x && x <= domRect.x + domRect.width) && (y >= domRect.y && y <= domRect.y + domRect.height)) {
                     // then let's flip ourselves
+                    clearAnimation();
                     flip();
                 }
                 // if the point not in the box?
@@ -130,7 +137,6 @@ const Card: React.FC<ICard> = (props: ICard): JSX.Element => {
         else {
             unflip();
         }
-        console.log(`Animation running: ${animationRunning}`)
         
     }
     const trackMousePos = (e: MouseEvent) => {
@@ -138,15 +144,14 @@ const Card: React.FC<ICard> = (props: ICard): JSX.Element => {
         mousePosition.current.y = e.pageY;
     }
     const mouseEnterHandler = (e: SyntheticEvent) => {
-        if (!animationRunning) {
+        if (!animationRunning.current) {
             // switch animation states
             flip();
         }
     };
     const mouseLeaveHandler = (e: SyntheticEvent) => {
-        console.log(`animation running on mouseLeave: ${animationRunning}`)
-        if (!animationRunning) {
-            console.log('wtf?')
+        console.log(animationRunning.current)
+        if (!animationRunning.current) {
             // switch animation states
             unflip();
         }
@@ -157,10 +162,10 @@ const Card: React.FC<ICard> = (props: ICard): JSX.Element => {
 
     return (
         <CardContainer ref={cardContainer} onMouseEnter={mouseEnterHandler} onMouseLeave={mouseLeaveHandler} onClick={clickHandler}>
-            {!flipped.current && <TitleContainer><TitleSpan>{props.title}</TitleSpan></TitleContainer>}
+            {!flipped && <TitleContainer><TitleSpan>{props.title}</TitleSpan></TitleContainer>}
             <ContentContainer>
-                {!flipped.current && props.teaser}
-                {flipped.current && props.content}
+                {!flipped && props.teaser}
+                {flipped && props.content}
             </ContentContainer>
         </CardContainer>
     )
