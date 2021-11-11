@@ -14,7 +14,7 @@ const CardGalleryLayout = styled.div`
 const CardGallery: React.FC<ICardGallery> = (props: ICardGallery): JSX.Element => {
     return (
         <CardGalleryLayout>
-            {props.cards.map(c => <Card title={c.title} content={c.content} link={c.link}/>)}
+            {props.cards.map(c => <Card title={c.title} teaser={c.teaser} link={c.link} content={c.content}/>)}
         </CardGalleryLayout>
     )
 }

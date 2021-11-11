@@ -6,20 +6,21 @@ function App() {
   const cards: ICard[] = [
     {
       title: 'Knowledge Base',
-      content: 'Contains code snippets, technical articles, and blog posts related to various technologies' 
+      teaser: 'Contains code snippets, technical articles, and blog posts related to various technologies' 
     },
     {
       title: 'Magic of CSS',
-      content: 'A visual tutorial of many CSS concepts',
-      link: 'https://adamschwartz.co/magic-of-css/'
+      teaser: 'A visual tutorial of many CSS concepts',
+      link: 'https://adamschwartz.co/magic-of-css/',
+      content: 'Covers a lot of useful stuff'
     },
     {
       title: 'Styled-Components Getting Started Guide',
-      content: 'A first-party beginner\'s tutorial to the styled-components library' 
+      teaser: 'A first-party beginner\'s tutorial to the styled-components library' 
     },
     {
       title: 'Basic Concepts of Flexbox',
-      content: 'A tutorial from mozilla that explains how CSS flexbox works'
+      teaser: 'A tutorial from mozilla that explains how CSS flexbox works'
     },
   ] 
   return (

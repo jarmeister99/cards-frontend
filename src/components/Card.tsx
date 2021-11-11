@@ -5,7 +5,8 @@ import '../animations/rotateY.css';
 
 export interface ICard {
     title: string;
-    content: string;
+    teaser: string;
+    content?: string;
     link?: string;
 };
 
@@ -80,6 +81,7 @@ const Card: React.FC<ICard> = (props: ICard): JSX.Element => {
         }
     };
     const mouseLeaveHandler = (e: SyntheticEvent) => {
+        console.log("foooo");
         hovering.current = false;
         // if we are not currently in an animation
         if (!animationRunning) {
@@ -89,16 +91,15 @@ const Card: React.FC<ICard> = (props: ICard): JSX.Element => {
         }
     };
     const clickHandler = (e: SyntheticEvent) => {
-        console.log(props.link)
         window.location.href = props.link || '/';
     }
 
     return (
         <CardContainer ref={cardContainer} onMouseEnter={mouseEnterHandler} onMouseLeave={mouseLeaveHandler} onClick={clickHandler}>
-            <TitleContainer><TitleSpan>{props.title}</TitleSpan></TitleContainer>
+            { !flipped && <TitleContainer><TitleSpan>{props.title}</TitleSpan></TitleContainer> }
             <ContentContainer>
-                {!flipped && props.content}
-                {flipped && 'foo'}
+                {!flipped && props.teaser}
+                {flipped && props.content}
             </ContentContainer>
         </CardContainer>
     )
