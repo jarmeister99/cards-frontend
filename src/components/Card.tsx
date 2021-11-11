@@ -1,5 +1,7 @@
-import React from 'react';
-import styled from 'styled-components'
+import React, { Dispatch, SetStateAction, SyntheticEvent } from 'react';
+import styled from 'styled-components';
+import { useRef, useEffect, useState } from 'react';
+import '../animations/rotateY.css';
 
 export interface ICard {
     title: string;
@@ -13,6 +15,13 @@ const CardContainer = styled.div`
     // border-radius: 10px;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     margin: 1%;
+    animation-fill-mode: forward;
+    // transition: transform 750ms;
+    // :hover {
+    //     transition: transform 750ms;
+    //     transform: rotateY(180deg);
+    // }
+
 `;
 const TitleContainer = styled.div`
 
@@ -36,12 +45,51 @@ const ContentContainer = styled.div`
 `;
 
 const Card: React.FC<ICard> = (props: ICard): JSX.Element => {
-    return (
-        <CardContainer>
-            <TitleContainer><TitleSpan>{props.title}</TitleSpan></TitleContainer>
-            <ContentContainer>{props.content}</ContentContainer>
-        </CardContainer>
-    )
+    const [flipped, setFlipped]: [Boolean, Dispatch<SetStateAction<Boolean>>] = useState<Boolean>(false)
+    const [animationRunning, setAnimationRunning]: [Boolean, Dispatch<SetStateAction<Boolean>>] = useState<Boolean>(false)
+    const cardContainer = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        cardContainer.current?.addEventListener('animationend', () => {
+            setAnimationRunning(false);
+        });
+        cardContainer.current?.addEventListener('animationstart', () => {
+            setAnimationRunning(true);
+        });
+    }, [])
+
+    const mouseThresholdHandler = (e: SyntheticEvent) => {
+        if (flipped && !animationRunning){
+            cardContainer.current?.classList.add('rotateInwards');
+            cardContainer.current?.classList.remove('rotateOutwards');
+            setFlipped(!flipped);
+        }
+        else if (!flipped && !animationRunning){
+            cardContainer.current?.classList.add('rotateOutwards');
+            cardContainer.current?.classList.remove('rotateInwards');
+            setFlipped(!flipped);
+        }
+    }
+
+    if (!flipped) {
+        return (
+            <CardContainer ref={cardContainer} onMouseEnter={mouseThresholdHandler}>
+                <TitleContainer><TitleSpan>{props.title}</TitleSpan></TitleContainer>
+                <ContentContainer>
+                    {props.content}
+                </ContentContainer>
+            </CardContainer>
+        )
+    }
+    else {
+        return (
+            <CardContainer ref={cardContainer} onMouseLeave={mouseThresholdHandler}>
+                <ContentContainer>
+                    Flipped: {flipped.toString()}
+                </ContentContainer>
+            </CardContainer>
+        )
+    }
 }
 
 export default Card;
