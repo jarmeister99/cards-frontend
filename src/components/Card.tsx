@@ -9,6 +9,10 @@ export interface ICard {
     content?: string;
     link?: string;
 };
+interface Point {
+    x: number;
+    y: number;
+}
 
 const CardContainer = styled.div`
     width: 20%;
@@ -45,53 +49,106 @@ const ContentContainer = styled.div`
 `;
 
 const Card: React.FC<ICard> = (props: ICard): JSX.Element => {
-    const [flipped, setFlipped]: [Boolean, Dispatch<SetStateAction<Boolean>>] = useState<Boolean>(false);
     const [animationRunning, setAnimationRunning]: [Boolean, Dispatch<SetStateAction<Boolean>>] = useState<Boolean>(false);
 
-    const hovering = useRef<Boolean>(false);
     const cardContainer = useRef<HTMLDivElement>(null);
+    const mousePosition = useRef<Point>({ x: 0, y: 0 });
+    const flipped = useRef<Boolean>(false);
 
-    useEffect(() => {
-        cardContainer.current?.addEventListener('animationend', () => {
-            console.log(`hovering status at end of animation: ${hovering.current}`);
-            setAnimationRunning(false);
-            // if the animation has ended and we are still hovering
-            if (hovering.current) {
-                setFlipped(true);
+    const flip = () => {
+        // switch animation states
+        cardContainer.current?.classList.add('rotateInwards');
+        cardContainer.current?.classList.remove('rotateOutwards');
+
+        flipped.current = true;
+        setAnimationRunning(true);
+
+        // start tracking mousePos()
+        document.body.addEventListener('mousemove', trackMousePos)
+        // attach animation end handler
+        cardContainer.current?.addEventListener('animationend', animationEndHandler);
+    }
+    const unflip = () => {
+        cardContainer.current?.classList.add('rotateOutwards');
+        cardContainer.current?.classList.remove('rotateInwards');
+
+        flipped.current = false;
+        setAnimationRunning(true);
+
+        // start tracking mousePos()
+        document.body.addEventListener('mousemove', trackMousePos)
+        // attach animation end handler
+        cardContainer.current?.addEventListener('animationend', animationEndHandler);
+    }
+    const clearAnimation = () => {
+        // no longer animating
+        setAnimationRunning(false);
+
+        // disable handler once it has triggered once
+        cardContainer.current?.removeEventListener('animationend', animationEndHandler);
+    }
+
+    const animationEndHandler = () => {
+        document.body.removeEventListener('mousemove', trackMousePos);
+
+        // unpack mouse position for ease of use
+        const x = mousePosition.current.x;
+        const y = mousePosition.current.y;
+
+        // get rect created by the square
+        const domRect: DOMRect | undefined = cardContainer.current?.getBoundingClientRect();
+
+        if (domRect !== undefined) { // we love typescript
+            // if we just finished a flip, we better be in the box
+            if (flipped.current) {
+                // is the point not in the box?
+                if (!((x >= domRect.x && x <= domRect.x + domRect.width) && (y >= domRect.y && y <= domRect.y + domRect.height))) {
+                    // then let's unflip ourselves
+                    unflip();
+                }
+                // is the point in the box?
+                else {
+                    // animation is over
+                    clearAnimation();
+                }
             }
-            // if we are no longer hovering
+            // if we just finished an unflip, we better be out of the box
             else {
-                setFlipped(false);
-                // switch animation states
-                cardContainer.current?.classList.add('rotateOutwards');
-                cardContainer.current?.classList.remove('rotateInwards');
+                // is the point in the box?
+                if ((x >= domRect.x && x <= domRect.x + domRect.width) && (y >= domRect.y && y <= domRect.y + domRect.height)) {
+                    // then let's flip ourselves
+                    flip();
+                }
+                // if the point not in the box?
+                else {
+                    // animation is over
+                    clearAnimation();
+                }
             }
-        });
-        cardContainer.current?.addEventListener('animationstart', () => {
-            setAnimationRunning(true);
-        });
-    }, [])
-
+        }
+        // freak case that should never happen - unflip just to have reliable behavior
+        else {
+            unflip();
+        }
+        console.log(`Animation running: ${animationRunning}`)
+        
+    }
+    const trackMousePos = (e: MouseEvent) => {
+        mousePosition.current.x = e.pageX;
+        mousePosition.current.y = e.pageY;
+    }
     const mouseEnterHandler = (e: SyntheticEvent) => {
-        console.log('mouse enter')
-        hovering.current = true;
-        // if we are not currently in an animation
         if (!animationRunning) {
-            console.log('mouse enter while animation is not running')
             // switch animation states
-            cardContainer.current?.classList.add('rotateInwards');
-            cardContainer.current?.classList.remove('rotateOutwards');
+            flip();
         }
     };
     const mouseLeaveHandler = (e: SyntheticEvent) => {
-        console.log('mouse leave')
-        hovering.current = false;
-        // if we are not currently in an animation
+        console.log(`animation running on mouseLeave: ${animationRunning}`)
         if (!animationRunning) {
-            console.log('mouse leave while animation is not running')
+            console.log('wtf?')
             // switch animation states
-            cardContainer.current?.classList.add('rotateOutwards');
-            cardContainer.current?.classList.remove('rotateInwards');
+            unflip();
         }
     };
     const clickHandler = (e: SyntheticEvent) => {
@@ -100,10 +157,10 @@ const Card: React.FC<ICard> = (props: ICard): JSX.Element => {
 
     return (
         <CardContainer ref={cardContainer} onMouseEnter={mouseEnterHandler} onMouseLeave={mouseLeaveHandler} onClick={clickHandler}>
-            { !flipped && <TitleContainer><TitleSpan>{props.title}</TitleSpan></TitleContainer> }
+            {!flipped.current && <TitleContainer><TitleSpan>{props.title}</TitleSpan></TitleContainer>}
             <ContentContainer>
-                {!flipped && props.teaser}
-                {flipped && props.content}
+                {!flipped.current && props.teaser}
+                {flipped.current && props.content}
             </ContentContainer>
         </CardContainer>
     )
