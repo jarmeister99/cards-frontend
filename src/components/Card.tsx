@@ -97,7 +97,6 @@ const Card: React.FC<ICard> = (props: ICard): JSX.Element => {
         // disable handler once it has triggered once
         cardContainer.current?.removeEventListener('animationend', animationEndHandler);
     }
-
     const animationEndHandler = () => {
         document.body.removeEventListener('mousemove', trackMousePos);
 
@@ -155,6 +154,7 @@ const Card: React.FC<ICard> = (props: ICard): JSX.Element => {
         mousePosition.current.x = e.pageX;
         mousePosition.current.y = e.pageY;
     }
+
     const mouseEnterHandler = (e: SyntheticEvent) => {
         if (!animationRunning.current && !flipped) {
             // switch animation states
