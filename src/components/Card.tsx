@@ -1,7 +1,7 @@
 import React, { Dispatch, SetStateAction, SyntheticEvent } from 'react';
 import styled from 'styled-components';
 import { useRef, useEffect, useState } from 'react';
-import '../animations/slide_from_top.css';
+import '../animations/rotateY.css';
 
 export interface ICard {
     title: string;
@@ -43,42 +43,64 @@ const TitleSpan = styled.div`
 const ContentContainer = styled.div`
     margin-top: 5px;
 `;
-const CardSlider = styled.div`
-    overflow: hidden;
-    transform: translateY(0);
-`;
 
 const Card: React.FC<ICard> = (props: ICard): JSX.Element => {
     const [flipped, setFlipped]: [Boolean, Dispatch<SetStateAction<Boolean>>] = useState<Boolean>(false);
     const [animationRunning, setAnimationRunning]: [Boolean, Dispatch<SetStateAction<Boolean>>] = useState<Boolean>(false);
 
+    const hovering = useRef<Boolean>(false);
     const cardContainer = useRef<HTMLDivElement>(null);
-    const cardSlider = useRef<HTMLDivElement>(null);
 
+    useEffect(() => {
+        cardContainer.current?.addEventListener('animationend', () => {
+            setAnimationRunning(false);
+            // if the animation has ended and we are still hovering
+            if (hovering.current) {
+                setFlipped(true);
+            }
+            // if we are no longer hovering
+            else {
+                setFlipped(false);
+                // switch animation states
+                cardContainer.current?.classList.add('rotateOutwards');
+                cardContainer.current?.classList.remove('rotateInwards');
+            }
+        });
+        cardContainer.current?.addEventListener('animationstart', () => {
+            setAnimationRunning(true);
+        });
+    }, [])
 
+    const mouseEnterHandler = (e: SyntheticEvent) => {
+        hovering.current = true;
+        // if we are not currently in an animation
+        if (!animationRunning) {
+            // switch animation states
+            cardContainer.current?.classList.add('rotateInwards');
+            cardContainer.current?.classList.remove('rotateOutwards');
+        }
+    };
+    const mouseLeaveHandler = (e: SyntheticEvent) => {
+        console.log("foooo");
+        hovering.current = false;
+        // if we are not currently in an animation
+        if (!animationRunning) {
+            // switch animation states
+            cardContainer.current?.classList.add('rotateOutwards');
+            cardContainer.current?.classList.remove('rotateInwards');
+        }
+    };
     const clickHandler = (e: SyntheticEvent) => {
         window.location.href = props.link || '/';
-    }
-    const mouseEnterHandler = (e: SyntheticEvent) => {
-        // Apply the rotation
-        cardSlider.current?.classList.add('slideFromTop');
-        setFlipped(true);
-    }
-    const mouseLeaveHandler = (e: SyntheticEvent) => {
-        // Apply the rotation
-        cardSlider.current?.classList.add('slideFromTop');
-        setFlipped(false);
     }
 
     return (
         <CardContainer ref={cardContainer} onMouseEnter={mouseEnterHandler} onMouseLeave={mouseLeaveHandler} onClick={clickHandler}>
-            <CardSlider ref={cardSlider}>
-                { !flipped && <TitleContainer><TitleSpan>{props.title}</TitleSpan></TitleContainer> }
-                <ContentContainer>
-                    {!flipped && props.teaser}
-                    {flipped && props.content}
-                </ContentContainer>
-            </CardSlider>
+            { !flipped && <TitleContainer><TitleSpan>{props.title}</TitleSpan></TitleContainer> }
+            <ContentContainer>
+                {!flipped && props.teaser}
+                {flipped && props.content}
+            </ContentContainer>
         </CardContainer>
     )
 
