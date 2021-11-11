@@ -1,5 +1,5 @@
 .rotateInwards {
-    animation: rotateInwardsAnimation 400ms normal ease-out;
+    animation: rotateInwardsAnimation 250ms normal ease-out;
 }
 @keyframes rotateInwardsAnimation {
     from {

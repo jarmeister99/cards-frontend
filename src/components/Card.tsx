@@ -16,6 +16,7 @@ interface Point {
 
 const CardContainer = styled.div`
     width: 20%;
+    height: 10em;
     border: 3px solid black;
     padding: 1em;
     border-radius: 10px;
@@ -57,7 +58,6 @@ const Card: React.FC<ICard> = (props: ICard): JSX.Element => {
     const flippedRef = useRef<Boolean>(false);
 
     const flip = () => {
-        console.log('Flipping')
         // switch animation states
         cardContainer.current?.classList.add('rotateInwards');
         cardContainer.current?.classList.remove('rotateOutwards');
@@ -72,7 +72,6 @@ const Card: React.FC<ICard> = (props: ICard): JSX.Element => {
         cardContainer.current?.addEventListener('animationend', animationEndHandler);
     }
     const unflip = () => {
-        console.log('Unflipping')
         cardContainer.current?.classList.add('rotateOutwards');
         cardContainer.current?.classList.remove('rotateInwards');
 
@@ -135,6 +134,7 @@ const Card: React.FC<ICard> = (props: ICard): JSX.Element => {
         }
         // freak case that should never happen - unflip just to have reliable behavior
         else {
+            clearAnimation();
             unflip();
         }
         
@@ -144,14 +144,13 @@ const Card: React.FC<ICard> = (props: ICard): JSX.Element => {
         mousePosition.current.y = e.pageY;
     }
     const mouseEnterHandler = (e: SyntheticEvent) => {
-        if (!animationRunning.current) {
+        if (!animationRunning.current && !flipped) {
             // switch animation states
             flip();
         }
     };
     const mouseLeaveHandler = (e: SyntheticEvent) => {
-        console.log(animationRunning.current)
-        if (!animationRunning.current) {
+        if (!animationRunning.current && flipped) {
             // switch animation states
             unflip();
         }
