@@ -53,6 +53,7 @@ const Card: React.FC<ICard> = (props: ICard): JSX.Element => {
 
     useEffect(() => {
         cardContainer.current?.addEventListener('animationend', () => {
+            console.log(`hovering status at end of animation: ${hovering.current}`);
             setAnimationRunning(false);
             // if the animation has ended and we are still hovering
             if (hovering.current) {
@@ -72,18 +73,22 @@ const Card: React.FC<ICard> = (props: ICard): JSX.Element => {
     }, [])
 
     const mouseEnterHandler = (e: SyntheticEvent) => {
+        console.log('mouse enter')
         hovering.current = true;
         // if we are not currently in an animation
         if (!animationRunning) {
+            console.log('mouse enter while animation is not running')
             // switch animation states
             cardContainer.current?.classList.add('rotateInwards');
             cardContainer.current?.classList.remove('rotateOutwards');
         }
     };
     const mouseLeaveHandler = (e: SyntheticEvent) => {
+        console.log('mouse leave')
         hovering.current = false;
         // if we are not currently in an animation
         if (!animationRunning) {
+            console.log('mouse leave while animation is not running')
             // switch animation states
             cardContainer.current?.classList.add('rotateOutwards');
             cardContainer.current?.classList.remove('rotateInwards');
