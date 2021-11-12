@@ -76,6 +76,8 @@ const ContentContainer = styled.div`
 `;
 const TeaserContainer = styled.div`
     margin-top: 5px;
+    text-overflow: ellipsis;
+
 `;
 
 const Card: React.FC<ICard> = (props: ICard): JSX.Element => {

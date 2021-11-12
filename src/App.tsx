@@ -1,6 +1,6 @@
 import React from 'react';
 import { ICard } from './components/Card/Card';
-import CreateCard from './components/CreateCard/CreateCard';
+import ControlPanel from './components/ControlPanel/ControlPanel';
 import CardGallery from './components/CardGallery/CardGallery';
 
 import castle1 from './img/castle1.jpg';
@@ -43,7 +43,7 @@ function App() {
   ]
   return (
     <div className="App">
-      <CreateCard />
+      <ControlPanel />
       <CardGallery cards={cards} />
     </div>
   );
