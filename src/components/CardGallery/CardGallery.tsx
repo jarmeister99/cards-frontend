@@ -1,5 +1,5 @@
 import React from 'react';
-import Card, { ICard } from './Card';
+import Card, { ICard } from '../Card/Card';
 import styled from 'styled-components'
 
 export interface ICardGallery {
