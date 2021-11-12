@@ -63,8 +63,6 @@ const Card: React.FC<ICard> = (props: ICard): JSX.Element => {
         document.addEventListener('mouseleave', e => offPage.current = true);
         document.addEventListener('mouseenter', e => offPage.current = false);
 
-        // start tracking mousePos
-        document.body.addEventListener('mousemove', trackMousePos)
     }, [])
 
     const flip = () => {
@@ -76,6 +74,9 @@ const Card: React.FC<ICard> = (props: ICard): JSX.Element => {
         flippedRef.current = true
         animationRunning.current = true;
 
+        // start tracking mousePos
+        document.body.addEventListener('mousemove', trackMousePos)
+
         // attach animation end handler
         cardContainer.current?.addEventListener('animationend', animationEndHandler);
     }
@@ -86,6 +87,9 @@ const Card: React.FC<ICard> = (props: ICard): JSX.Element => {
         setFlipped(false);
         flippedRef.current = false;
         animationRunning.current = true;
+
+        // start tracking mousePos
+        document.body.addEventListener('mousemove', trackMousePos)
 
         // attach animation end handler
         cardContainer.current?.addEventListener('animationend', animationEndHandler);
@@ -100,10 +104,6 @@ const Card: React.FC<ICard> = (props: ICard): JSX.Element => {
     const animationEndHandler = () => {
         document.body.removeEventListener('mousemove', trackMousePos);
 
-        // unpack mouse position for ease of use
-        const x = mousePosition.current.x;
-        const y = mousePosition.current.y;
-
         // get rect created by the square
         const domRect: DOMRect | undefined = cardContainer.current?.getBoundingClientRect();
 
@@ -111,13 +111,13 @@ const Card: React.FC<ICard> = (props: ICard): JSX.Element => {
             // if we just finished a flip, we better be in the box
             if (flippedRef.current) {
                 // is the point not in the box?
-                if (!((x >= domRect.x && x <= domRect.x + domRect.width) && (y >= domRect.y && y <= domRect.y + domRect.height))) {
+                if (!((mousePosition.current.x >= domRect.x && mousePosition.current.x <= domRect.x + domRect.width) && (mousePosition.current.y >= domRect.y && mousePosition.current.y <= domRect.y + domRect.height))) {
                     // then let's unflip ourselves
                     clearAnimation();
                     unflip();
                 }
                 // or if we moved offpage for some strange reason
-                else if (offPage.current){
+                else if (offPage.current) {
                     // then let's unflip ourselves
                     clearAnimation();
                     unflip();
@@ -131,7 +131,7 @@ const Card: React.FC<ICard> = (props: ICard): JSX.Element => {
             // if we just finished an unflip, we better be out of the box
             else {
                 // is the point in the box?
-                if ((x >= domRect.x && x <= domRect.x + domRect.width) && (y >= domRect.y && y <= domRect.y + domRect.height) && !offPage.current) {
+                if ((mousePosition.current.x >= domRect.x && mousePosition.current.x <= domRect.x + domRect.width) && (mousePosition.current.y >= domRect.y && mousePosition.current.y <= domRect.y + domRect.height) && !offPage.current) {
                     // then let's flip ourselves
                     clearAnimation();
                     flip();
@@ -148,15 +148,11 @@ const Card: React.FC<ICard> = (props: ICard): JSX.Element => {
             clearAnimation();
             unflip();
         }
-        
+
     }
     const trackMousePos = (e: MouseEvent) => {
         mousePosition.current.x = e.pageX;
         mousePosition.current.y = e.pageY;
-        
-                // // unpack mouse position for ease of use
-                // const x = mousePosition.current.x;
-                // const y = mousePosition.current.y;
     }
 
     const mouseEnterHandler = (e: SyntheticEvent) => {
