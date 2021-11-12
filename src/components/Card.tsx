@@ -2,6 +2,7 @@ import React, { SyntheticEvent } from 'react';
 import styled from 'styled-components';
 import { useRef, useEffect, useState } from 'react';
 import '../animations/rotateY.css';
+import test_image from '../test.png';
 
 export interface ICard {
     title: string;
@@ -17,17 +18,19 @@ interface Point {
 const CardContainer = styled.div`
     width: 20%;
     height: 10em;
-    border: 3px solid black;
+    border: 2px solid black;
     padding: 1em;
     border-radius: 10px;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     margin: 1%;
     animation-fill-mode: forward;
+    background-image: url(${test_image});
+
     :hover {
         cursor: pointer;
     }
-
 `;
+
 const TitleContainer = styled.div`
 
 `;
