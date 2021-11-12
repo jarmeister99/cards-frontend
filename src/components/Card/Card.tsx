@@ -88,7 +88,6 @@ const Card: React.FC<ICard> = (props: ICard): JSX.Element => {
     }
     const flip = () => {
         setFlipped(!flipped);
-        console.log('flip')
     }
     return (
         <CardContainer className={"card-container" + (flipped ? " flipped" : "")} onClick={clickHandler} onMouseEnter={flip} onMouseLeave={flip}>
