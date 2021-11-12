@@ -17,38 +17,44 @@ interface Point {
 
 const CardContainer = styled.div`
     width: 20%;
-    height: 10em;
-    border: 2px solid black;
+    height: 12em;
+    border: 1px solid black;
     padding: 1em;
     border-radius: 10px;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     margin: 1%;
     animation-fill-mode: forward;
-    background-image: url(${test_image});
-
     :hover {
         cursor: pointer;
     }
 `;
+const ImageContainer = styled.div`
+    width: 100%;
+    height: 50%;
+    background-image: url(${test_image})
+`;
 
 const TitleContainer = styled.div`
-
+    margin-top: 1em;
 `;
 const TitleSpan = styled.div`
     font-weight: 750;
     text-align: center;
-    :after {
-        content: '';
-        margin-top: 0.7em;
-        margin-bottom: 0.7em;
-        margin-left: 15%;
-        width: 70%;
-        height: 2px;
-        background: black;
-        display: block;
-    }
+    // :after {
+    //     content: '';
+    //     margin-top: 0.7em;
+    //     margin-bottom: 0.7em;
+    //     margin-left: 15%;
+    //     width: 70%;
+    //     height: 2px;
+    //     background: black;
+    //     display: block;
+    // }
 `;
 const ContentContainer = styled.div`
+    margin-top: 5px;
+`;
+const TeaserContainer = styled.div`
     margin-top: 5px;
 `;
 
@@ -116,12 +122,14 @@ const Card: React.FC<ICard> = (props: ICard): JSX.Element => {
                 // is the point not in the box?
                 if (!((mousePosition.current.x >= domRect.x && mousePosition.current.x <= domRect.x + domRect.width) && (mousePosition.current.y >= domRect.y && mousePosition.current.y <= domRect.y + domRect.height))) {
                     // then let's unflip ourselves
+                    console.log('Unflipped after a flip')
                     clearAnimation();
                     unflip();
                 }
                 // or if we moved offpage for some strange reason
                 else if (offPage.current) {
                     // then let's unflip ourselves
+                    console.log('Unflipped after a flip - off page')
                     clearAnimation();
                     unflip();
                 }
@@ -136,6 +144,7 @@ const Card: React.FC<ICard> = (props: ICard): JSX.Element => {
                 // is the point in the box?
                 if ((mousePosition.current.x >= domRect.x && mousePosition.current.x <= domRect.x + domRect.width) && (mousePosition.current.y >= domRect.y && mousePosition.current.y <= domRect.y + domRect.height) && !offPage.current) {
                     // then let's flip ourselves
+                    console.log('Flip after unflip')
                     clearAnimation();
                     flip();
                 }
@@ -163,6 +172,9 @@ const Card: React.FC<ICard> = (props: ICard): JSX.Element => {
             // switch animation states
             flip();
         }
+        else if (!animationRunning && flipped){
+            console.log('fooba')
+        }
     };
     const mouseLeaveHandler = (e: SyntheticEvent) => {
         if (!animationRunning.current && flipped) {
@@ -176,11 +188,16 @@ const Card: React.FC<ICard> = (props: ICard): JSX.Element => {
 
     return (
         <CardContainer ref={cardContainer} onMouseEnter={mouseEnterHandler} onMouseLeave={mouseLeaveHandler} onClick={clickHandler}>
-            {!flipped && <TitleContainer><TitleSpan>{props.title}</TitleSpan></TitleContainer>}
-            <ContentContainer>
-                {!flipped && props.teaser}
-                {flipped && props.content}
-            </ContentContainer>
+            { !flipped &&
+                <>
+                    <ImageContainer></ImageContainer>
+                    <TitleContainer><TitleSpan>{props.title}</TitleSpan></TitleContainer>
+                    <TeaserContainer>{props.teaser}</TeaserContainer>
+                </>
+            }
+            { flipped && 
+                <ContentContainer>{props.content}</ContentContainer>
+            }
         </CardContainer>
     )
 
