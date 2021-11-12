@@ -1,0 +1,43 @@
+$new-white: rgb(247, 247, 247);
+
+.card-container {
+    :hover {
+        cursor: pointer;
+    }
+    &.flipped {
+        .front {
+            transform: rotateY(180deg);
+        }
+        .back {
+            transform: rotateY(0deg);
+        }
+    }
+    .front,
+    .back {
+        box-sizing: border-box;
+        height: 100%;
+        width: 100%;
+        display: block;
+        background: $new-white;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        padding: 10px;
+        position: absolute;
+        border-radius: 10px;
+        backface-visibility: hidden;
+        transform-style: preserve-3d;
+        transition: -webkit-transform ease 500ms;
+        transition: transform ease 500ms;
+    }
+    .front {
+        z-index: 2;
+        transform: rotateY(0deg);
+        /* front tile styles go here! */
+    }
+    .back {
+        background: $new-white;
+        transform: rotateY(-180deg);
+        padding: 20px;
+        font-size: 20px;
+        /* back tile styles go here! */
+    }
+}

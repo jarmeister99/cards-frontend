@@ -1,40 +1,40 @@
 import React, { SyntheticEvent } from 'react';
 import styled from 'styled-components';
-import { useRef, useEffect, useState } from 'react';
-import '../animations/rotateY.css';
+import { useState } from 'react';
+import './Card.scss'
 
 export interface ICard {
     title: string;
     teaser: string;
-    content?: string;
+    content: string;
     link?: string;
     tags?: string[];
-    img_url?: string;
+    img_url: string;
 };
-interface Point {
-    x: number;
-    y: number;
+interface ICardBack {
+    content: string;
+}
+interface ICardFront {
+    img_url: string;
+    title: string;
+    teaser: string;
+    tags?: string[];
 }
 
 const CardContainer = styled.div`
+    height: 20em;
+    margin: 0;
+    padding: 0;
+    top: 20px;
     width: 20%;
-    height: 15em;
-
-    border: 1px solid black;
-    padding: 1em;
-    border-radius: 10px;
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-    margin: 1%;
-    animation-fill-mode: forward;
-    :hover {
-        cursor: pointer;
-    }
     position: relative;
+    transform-style: preserve-3d;
+    box-sizing: border-box;
 `;
-const ImageContainer = styled.div<{ image_url: string }>`
+const ImageContainer = styled.div<{ img_url: string }>`
     width: 100%;
     height: 50%;
-    background-image: url(${props => props.image_url});
+    background-image: url(${props => props.img_url});
     background-size: cover;   
     background-position: center center;
 `;
@@ -45,27 +45,31 @@ const TitleContainer = styled.div`
 const TitleSpan = styled.div`
     font-weight: 750;
     text-align: center;
-    // :after {
-    //     content: '';
-    //     margin-top: 0.7em;
-    //     margin-bottom: 0.7em;
-    //     margin-left: 15%;
-    //     width: 70%;
-    //     height: 2px;
-    //     background: black;
-    //     display: block;
-    // }
 `;
 const TagsContainer = styled.div`
     position: absolute;
-    bottom: 1em;
+    bottom: 0.5em;
+    left: 0;
     margin-top: 0.5em;
     display: flex;
     flex-direction: row;
-    justify-content: start;
+    justify-content: space-evenly;
     flex-wrap: wrap;
     width: 100%;
     text-align: center;
+    :before{
+        content: "";
+        position: absolute;
+        width: 60%;
+        height: 1px;
+        top: -0.5em;
+        left: 20%;
+        border-top: 1px solid gray;
+    }
+`;
+const TagSpan = styled.span`
+    margin-left: 0.25em;
+    margin-right: 0.25em;
 `;
 const ContentContainer = styled.div`
     margin-top: 5px;
@@ -75,149 +79,42 @@ const TeaserContainer = styled.div`
 `;
 
 const Card: React.FC<ICard> = (props: ICard): JSX.Element => {
+    const [flipped, setFlipped] = useState<boolean>(false);
 
-    const cardContainer = useRef<HTMLDivElement>(null);
-    const mousePosition = useRef<Point>({ x: 0, y: 0 });
-    const animationRunning = useRef<Boolean>(false);
-    const [flipped, setFlipped] = useState<Boolean>(false);
-    const flippedRef = useRef<Boolean>(false);
-    const offPage = useRef<Boolean>(false);
-
-    useEffect(() => {
-        // track whether mouse is on page
-        document.addEventListener('mouseleave', e => offPage.current = true);
-        document.addEventListener('mouseenter', e => offPage.current = false);
-
-    }, [])
-
-    const flip = () => {
-        // switch animation states
-        cardContainer.current?.classList.add('rotateInwards');
-        cardContainer.current?.classList.remove('rotateOutwards');
-
-        setFlipped(true);
-        flippedRef.current = true
-        animationRunning.current = true;
-
-        // start tracking mousePos
-        document.body.addEventListener('mousemove', trackMousePos)
-
-        // attach animation end handler
-        cardContainer.current?.addEventListener('animationend', animationEndHandler);
-    }
-    const unflip = () => {
-        cardContainer.current?.classList.add('rotateOutwards');
-        cardContainer.current?.classList.remove('rotateInwards');
-
-        setFlipped(false);
-        flippedRef.current = false;
-        animationRunning.current = true;
-
-        // start tracking mousePos
-        document.body.addEventListener('mousemove', trackMousePos)
-
-        // attach animation end handler
-        cardContainer.current?.addEventListener('animationend', animationEndHandler);
-    }
-    const clearAnimation = () => {
-        // no longer animating
-        animationRunning.current = false;
-
-        // disable handler once it has triggered once
-        cardContainer.current?.removeEventListener('animationend', animationEndHandler);
-    }
-    const animationEndHandler = () => {
-        document.body.removeEventListener('mousemove', trackMousePos);
-
-        // get rect created by the square
-        const domRect: DOMRect | undefined = (() => cardContainer.current?.getBoundingClientRect())();
-
-        if (domRect !== undefined) { // we love typescript
-            // if we just finished a flip, we better be in the box
-            if (flippedRef.current) {
-                // is the point not in the box?
-                if (!((mousePosition.current.x >= domRect.x && mousePosition.current.x <= domRect.x + domRect.width) && (mousePosition.current.y >= domRect.y && mousePosition.current.y <= domRect.y + domRect.height))) {
-                    // then let's unflip ourselves
-                    console.log('Unflipped after a flip')
-                    clearAnimation();
-                    unflip();
-                }
-                // or if we moved offpage for some strange reason
-                else if (offPage.current) {
-                    // then let's unflip ourselves
-                    console.log('Unflipped after a flip - off page')
-                    clearAnimation();
-                    unflip();
-                }
-                // is the point in the box?
-                else {
-                    // animation is over
-                    clearAnimation();
-                }
-            }
-            // if we just finished an unflip, we better be out of the box
-            else {
-                // is the point in the box?
-                if ((mousePosition.current.x >= domRect.x && mousePosition.current.x <= domRect.x + domRect.width) && (mousePosition.current.y >= domRect.y && mousePosition.current.y <= domRect.y + domRect.height) && !offPage.current) {
-                    // then let's flip ourselves
-                    console.log('Flip after unflip')
-                    clearAnimation();
-                    flip();
-                }
-                // if the point not in the box?
-                else {
-                    // animation is over
-                    clearAnimation();
-                }
-            }
-        }
-        // freak case that should never happen - unflip just to have reliable behavior
-        else {
-            clearAnimation();
-            unflip();
-        }
-
-    }
-    const trackMousePos = (e: MouseEvent) => {
-        mousePosition.current.x = e.pageX;
-        mousePosition.current.y = e.pageY;
-    }
-
-    const mouseEnterHandler = (e: SyntheticEvent) => {
-        if (!animationRunning.current && !flipped) {
-            // switch animation states
-            flip();
-        }
-        else if (!animationRunning && flipped) {
-            console.log('fooba')
-        }
-    };
-    const mouseLeaveHandler = (e: SyntheticEvent) => {
-        if (!animationRunning.current && flipped) {
-            // switch animation states
-            unflip();
-        }
-    };
     const clickHandler = (e: SyntheticEvent) => {
         window.location.href = props.link || '/';
     }
+    const flip = () => {
+        setFlipped(!flipped);
+        console.log('flip')
+    }
     return (
-        <CardContainer ref={cardContainer} onMouseEnter={mouseEnterHandler} onMouseLeave={mouseLeaveHandler} onClick={clickHandler}>
-            {!flipped &&
-                <>
-                    {props.img_url && <ImageContainer image_url={props.img_url}></ImageContainer>}
-                    <TitleContainer><TitleSpan>{props.title}</TitleSpan></TitleContainer>
-                    <TeaserContainer>{props.teaser}</TeaserContainer>
-                    <TagsContainer>{props.tags?.map(t => <span style={{width: "10%"}}>{t}</span>)}</TagsContainer>
-
-                </>
-            }
-            {flipped &&
-                <ContentContainer>{props.content}</ContentContainer>
-            }
+        <CardContainer className={"card-container" + (flipped ? " flipped" : "")} onClick={clickHandler} onMouseEnter={flip} onMouseLeave={flip}>
+            <Front img_url={props.img_url} title={props.title} teaser={props.teaser} tags={props.tags}/>
+            <Back content={props.content}/>
         </CardContainer>
     )
+}
+const Front: React.FC<ICardFront> = (props: ICardFront): JSX.Element => {
+    return (
+        <div className="front">
+            <ImageContainer img_url={props.img_url} title={props.title}>
+            </ImageContainer>
+            <TitleContainer><TitleSpan>{props.title}</TitleSpan></TitleContainer>
+            <TeaserContainer>{props.teaser}</TeaserContainer>
+            { props.tags && <TagsContainer>{props.tags.map(t => <TagSpan>{t}</TagSpan>)}</TagsContainer> }
+        </div>
+    )
+}
 
+const Back: React.FC<ICardBack> = (props: ICardBack): JSX.Element => {
+    return (
+        <div className="back">
+            <ContentContainer>
+                {props.content}
+            </ContentContainer>
+        </div>
+    )
 }
 
 export default Card;
