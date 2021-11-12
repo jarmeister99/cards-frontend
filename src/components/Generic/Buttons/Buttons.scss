@@ -1,0 +1,10 @@
+.expand {
+    &:hover{
+        transition: transform 0.15s;
+        transform: scale(1.2);
+    }
+    &:not(:hover){
+        transition: transform 0.15s;
+        transform: scale(1.0);
+    }
+}
