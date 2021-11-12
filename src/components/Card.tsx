@@ -2,13 +2,14 @@ import React, { SyntheticEvent } from 'react';
 import styled from 'styled-components';
 import { useRef, useEffect, useState } from 'react';
 import '../animations/rotateY.css';
-import test_image from '../test.png';
 
 export interface ICard {
     title: string;
     teaser: string;
     content?: string;
     link?: string;
+    tags?: string[];
+    img_url?: string;
 };
 interface Point {
     x: number;
@@ -17,7 +18,8 @@ interface Point {
 
 const CardContainer = styled.div`
     width: 20%;
-    height: 12em;
+    height: 15em;
+
     border: 1px solid black;
     padding: 1em;
     border-radius: 10px;
@@ -27,11 +29,14 @@ const CardContainer = styled.div`
     :hover {
         cursor: pointer;
     }
+    position: relative;
 `;
-const ImageContainer = styled.div`
+const ImageContainer = styled.div<{ image_url: string }>`
     width: 100%;
     height: 50%;
-    background-image: url(${test_image})
+    background-image: url(${props => props.image_url});
+    background-size: cover;   
+    background-position: center center;
 `;
 
 const TitleContainer = styled.div`
@@ -50,6 +55,17 @@ const TitleSpan = styled.div`
     //     background: black;
     //     display: block;
     // }
+`;
+const TagsContainer = styled.div`
+    position: absolute;
+    bottom: 1em;
+    margin-top: 0.5em;
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    flex-wrap: wrap;
+    width: 100%;
+    text-align: center;
 `;
 const ContentContainer = styled.div`
     margin-top: 5px;
@@ -114,7 +130,7 @@ const Card: React.FC<ICard> = (props: ICard): JSX.Element => {
         document.body.removeEventListener('mousemove', trackMousePos);
 
         // get rect created by the square
-        const domRect: DOMRect | undefined = cardContainer.current?.getBoundingClientRect();
+        const domRect: DOMRect | undefined = (() => cardContainer.current?.getBoundingClientRect())();
 
         if (domRect !== undefined) { // we love typescript
             // if we just finished a flip, we better be in the box
@@ -172,7 +188,7 @@ const Card: React.FC<ICard> = (props: ICard): JSX.Element => {
             // switch animation states
             flip();
         }
-        else if (!animationRunning && flipped){
+        else if (!animationRunning && flipped) {
             console.log('fooba')
         }
     };
@@ -185,17 +201,18 @@ const Card: React.FC<ICard> = (props: ICard): JSX.Element => {
     const clickHandler = (e: SyntheticEvent) => {
         window.location.href = props.link || '/';
     }
-
     return (
         <CardContainer ref={cardContainer} onMouseEnter={mouseEnterHandler} onMouseLeave={mouseLeaveHandler} onClick={clickHandler}>
-            { !flipped &&
+            {!flipped &&
                 <>
-                    <ImageContainer></ImageContainer>
+                    {props.img_url && <ImageContainer image_url={props.img_url}></ImageContainer>}
                     <TitleContainer><TitleSpan>{props.title}</TitleSpan></TitleContainer>
                     <TeaserContainer>{props.teaser}</TeaserContainer>
+                    <TagsContainer>{props.tags?.map(t => <span style={{width: "10%"}}>{t}</span>)}</TagsContainer>
+
                 </>
             }
-            { flipped && 
+            {flipped &&
                 <ContentContainer>{props.content}</ContentContainer>
             }
         </CardContainer>
