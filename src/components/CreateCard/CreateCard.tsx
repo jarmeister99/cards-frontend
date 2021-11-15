@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { SyntheticEvent, useRef, useState } from 'react';
 import styled from 'styled-components';
+
 import { PaleVioletButton } from '../Generic/Buttons/Buttons';
-import '../Generic/Buttons/Buttons.scss'
+import '../Generic/Buttons/Buttons.scss';
+import './CreateCard.scss';
 
 const CreateCardContainer = styled.div`
     display: flex;
@@ -14,9 +16,23 @@ const CreateCardContainer = styled.div`
 `;
 
 const CreateCard: React.FC = (props): JSX.Element => {
+    const [formActive, setFormActive] = useState<Boolean>(false);
+    const createPopupContainer = useRef<HTMLDivElement>(null);
+    const exitFormListener = (e: MouseEvent) => {
+        setFormActive(false);
+        createPopupContainer.current?.removeEventListener("mouseleave", exitFormListener)
+
+    }
+    const showForm = (e: SyntheticEvent) => {
+        setFormActive(true);
+        createPopupContainer.current?.addEventListener("mouseleave", exitFormListener)
+        console.log(`Added event listener to ${createPopupContainer.current}`)
+    }
+
     return (
         <CreateCardContainer>
-            <PaleVioletButton primary={true} className="expand">Create</PaleVioletButton>
+            <PaleVioletButton primary={true} className="expand" onClick={showForm}>Create</PaleVioletButton>
+            <div ref={createPopupContainer} className={"create-form" + (formActive ? " active" : "")}>!</div>
         </CreateCardContainer>
     )
 }

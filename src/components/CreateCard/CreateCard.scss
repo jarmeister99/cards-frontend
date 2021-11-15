@@ -1,0 +1,14 @@
+.create-form {
+    position: fixed;
+    top: 5%;
+    margin: 0;
+    width: 60%;
+    height: 85%;
+    z-index: 5;
+    border: 5px solid black;
+    border-radius: 10px;
+    visibility: hidden;
+    &.active {
+        visibility: visible !important;
+    }
+}
