@@ -8,16 +8,10 @@ export interface ICardGallery {
     cards: ICard[];
 }
 
-const CardGalleryDesktopLayout = styled.div`
+const CardGalleryLayout = styled.div`
     display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
-`;
-const CardGalleryMobileLayout = styled.div`
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-    justify-content: center;
 `;
 
 const CardGallery: React.FC<ICardGallery> = (props: ICardGallery): JSX.Element => {
@@ -25,17 +19,17 @@ const CardGallery: React.FC<ICardGallery> = (props: ICardGallery): JSX.Element =
 
     if (isDesktop) {
         return (
-            <CardGalleryDesktopLayout>
+            <CardGalleryLayout>
                 {props.cards.map(c => <Card title={c.title} teaser={c.teaser} link={c.link} content={c.content} tags={c.tags} img_url={c.img_url} />)}
-            </CardGalleryDesktopLayout>
+            </CardGalleryLayout>
         )
     }
     else {
         return (
             <div>
-                <CardGalleryMobileLayout>
+                <CardGalleryLayout>
                     {props.cards.map(c => <MobileCard title={c.title} teaser={c.teaser} link={c.link} content={c.content} tags={c.tags} img_url={c.img_url} />)}
-                </CardGalleryMobileLayout>
+                </CardGalleryLayout>
             </div>
         )
     }
