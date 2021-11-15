@@ -41,3 +41,19 @@ $new-white: rgb(247, 247, 247);
         /* back tile styles go here! */
     }
 }
+
+.mobile-card-container {
+    :hover {
+        cursor: pointer;
+    }
+    box-sizing: border-box;
+    height: 100%;
+    width: 90%;
+    margin: 0;
+    display: block;
+    background: $new-white;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    border-radius: 10px;
+    z-index: 2;
+    font-size: 20px;
+}

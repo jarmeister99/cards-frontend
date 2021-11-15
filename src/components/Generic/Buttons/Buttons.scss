@@ -1,13 +1,13 @@
 .expand {
-    &:hover{
+    &:hover {
         box-shadow: rgba(0, 0, 0, 0.25) 0px 3px 8px;
         transition: all 0.15s;
         transform: scale(1.2);
     }
-    &:not(:hover){
+    &:not(:hover) {
         box-shadow: 0;
         transition: all 0.15s;
-        transform: scale(1.0);
+        transform: scale(1);
     }
 }
 .centered {
