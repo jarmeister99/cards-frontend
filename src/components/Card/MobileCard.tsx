@@ -98,7 +98,7 @@ const MobileCard: React.FC<ICard> = (props: ICard): JSX.Element => {
             const element_width = mobileCardContainer.current?.offsetWidth;
             if (element_width != undefined){
                 const swipe_percentage = x_delta / element_width;
-                if (swipe_percentage > 0.30){
+                if (swipe_percentage > 0.10){
                     flip();
                 }
             }
