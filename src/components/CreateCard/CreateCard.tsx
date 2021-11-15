@@ -32,6 +32,8 @@ const CreateCard: React.FC = (props): JSX.Element => {
         createPopupContainer.current?.addEventListener("mouseleave", exitFormListener)
         console.log(`Added event listener to ${createPopupContainer.current}`)
     }
+
+    // TODO: Make sure mobile users can tap to exit
     const className = "create-form" + (formActive ? " active" : "") + (isDesktop ? "" : " mobile");
     return (
         <CreateCardContainer>
