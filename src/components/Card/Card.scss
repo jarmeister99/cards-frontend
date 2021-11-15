@@ -1,5 +1,10 @@
 $new-white: rgb(247, 247, 247);
 
+.mobile {
+    width: 90% !important;
+    margin-bottom: 2em !important;
+}
+
 .card-container {
     // touch-action: None; // prevent scrolling on mobile card container
     :hover {

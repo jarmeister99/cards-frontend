@@ -1,7 +1,8 @@
-import React, { SyntheticEvent } from 'react';
+import React, { SyntheticEvent, useRef } from 'react';
 import styled from 'styled-components';
 import { useState } from 'react';
 import './Card.scss'
+import { useMediaQuery } from 'react-responsive';
 
 export interface ICard {
     title: string;
@@ -13,13 +14,17 @@ export interface ICard {
 };
 interface ICardBack {
     content: string;
-}
+};
 interface ICardFront {
     img_url: string;
     title: string;
     teaser: string;
     tags?: string[];
-}
+};
+interface Point {
+    x: number;
+    y: number;
+};
 
 const CardContainer = styled.div`
     height: 20em;
@@ -82,6 +87,10 @@ const TeaserContainer = styled.div`
 
 const Card: React.FC<ICard> = (props: ICard): JSX.Element => {
     const [flipped, setFlipped] = useState<boolean>(false);
+    const isDesktop = useMediaQuery({ query: '(min-width: 1224px)' });
+    const mobileCardContainer = useRef<HTMLDivElement>(null);
+    const startTouchPos = useRef<Point>({ x: 0, y: 0 });
+    const touchPos = useRef<Point>({ x: 0, y: 0 });
 
     const clickHandler = (e: SyntheticEvent) => {
         window.location.href = props.link || '/';
@@ -89,12 +98,62 @@ const Card: React.FC<ICard> = (props: ICard): JSX.Element => {
     const flip = () => {
         setFlipped(!flipped);
     }
-    return (
-        <CardContainer className={"card-container" + (flipped ? " flipped" : "")} onClick={clickHandler} onMouseEnter={flip} onMouseLeave={flip}>
-            <Front img_url={props.img_url} title={props.title} teaser={props.teaser} tags={props.tags}/>
-            <Back content={props.content}/>
-        </CardContainer>
-    )
+    const endSwipeDetection = (e: SyntheticEvent) => {
+        if (e.nativeEvent instanceof TouchEvent) { // Just making typescript happy - TODO clean this up
+            const x_delta = Math.abs(startTouchPos.current.x - touchPos.current.x)
+            const element_width = mobileCardContainer.current?.offsetWidth; // TODO: our percentage seems to be incorrect on an actual phone - figure this out please?
+            if (element_width !== undefined){ 
+                const swipe_percentage = x_delta / element_width;
+                if (swipe_percentage > 0.35){
+                    flip();
+                }
+            }
+
+        }
+    }
+    const startSwipeDetection = (e: SyntheticEvent) => {
+        if (e.nativeEvent instanceof TouchEvent) { // Just making typescript happy - TODO clean this up
+            startTouchPos.current = {
+                x: e.nativeEvent.targetTouches[0].clientX,
+                y: e.nativeEvent.targetTouches[0].clientY,
+            }
+        }
+    }
+    const trackSwipe = (e: SyntheticEvent) => {
+        e.stopPropagation();
+        if (e.nativeEvent instanceof TouchEvent) { // Just making typescript happy - TODO clean this up
+            touchPos.current = {
+                x: e.nativeEvent.targetTouches[0].clientX,
+                y: e.nativeEvent.targetTouches[0].clientY,
+            }
+        }
+    }
+
+    if (isDesktop){
+        return (
+            <CardContainer 
+            className={"card-container" + (flipped ? " flipped" : "")} 
+            onClick={clickHandler} 
+            onMouseEnter={flip} 
+            onMouseLeave={flip}>
+                <Front img_url={props.img_url} title={props.title} teaser={props.teaser} tags={props.tags}/>
+                <Back content={props.content}/>
+            </CardContainer>
+        )
+    }
+    else{
+        return (
+            <CardContainer 
+            className={"mobile card-container" + (flipped ? " flipped" : "")} 
+            onTouchStart={startSwipeDetection}
+            onTouchEnd={endSwipeDetection}
+            onTouchMove={trackSwipe}>
+                <Front img_url={props.img_url} title={props.title} teaser={props.teaser} tags={props.tags}/>
+                <Back content={props.content}/>
+            </CardContainer>  
+        )
+    }
+
 }
 const Front: React.FC<ICardFront> = (props: ICardFront): JSX.Element => {
     return (
@@ -107,7 +166,6 @@ const Front: React.FC<ICardFront> = (props: ICardFront): JSX.Element => {
         </div>
     )
 }
-
 const Back: React.FC<ICardBack> = (props: ICardBack): JSX.Element => {
     return (
         <div className="back">
