@@ -17,9 +17,6 @@ const CreateCard: React.FC = (props): JSX.Element => {
     return (
         <CreateCardContainer>
             <PaleVioletButton primary={true} className="expand">Create</PaleVioletButton>
-            <PaleVioletButton primary={true} className="expand">Refresh</PaleVioletButton>
-            <PaleVioletButton primary={true} className="expand">IDK?</PaleVioletButton>
-
         </CreateCardContainer>
     )
 }
