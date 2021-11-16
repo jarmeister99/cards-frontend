@@ -44,6 +44,13 @@ const CreateCardTextAreaInput = styled.textarea`
     margin-top: 0.5em;
     width: 50%;
 `;
+const SubmitButtonContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 1em;
+`;
 
 const CreateCard: React.FC = (props): JSX.Element => {
     const [formActive, setFormActive] = useState<Boolean>(false);
@@ -90,9 +97,9 @@ const CreateCard: React.FC = (props): JSX.Element => {
                         <CreateCardInputLabel>(Optional) Image Link</CreateCardInputLabel>
                         <CreateCardLineInput></CreateCardLineInput>
                     </CreateCardInputGroup>
-                    <div style={{display: "flex", flexDirection: "row", flexWrap: "wrap", justifyContent: "center", marginTop: "1em"}}>
+                    <SubmitButtonContainer>
                         <PaleVioletButton primary={true} className="expand">Submit</PaleVioletButton>
-                    </div>
+                    </SubmitButtonContainer>
                 </CreateCardForm>
             </div>
         </CreateCardContainer>
