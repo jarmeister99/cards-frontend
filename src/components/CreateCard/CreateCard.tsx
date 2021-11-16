@@ -23,33 +23,28 @@ const CreateCardHeader = styled.span`
     font-size: 2em;
 `;
 const CreateCardForm = styled.form`
-`;
-const CreateCardInputGroup = styled.div`
-    margin-top 1em;
     display: flex;
-    flex-direction: row;
     flex-wrap: wrap;
-    justify-content: center;
-`;
-const CreateCardInputLabel = styled.label`
-    width: 100%;
-    margin: 0;
-    text-align: center;
-`;
-const CreateCardLineInput = styled.input`
-    margin-top: 0.5em;
-    width: 50%;
-`;
-const CreateCardTextAreaInput = styled.textarea`
-    margin-top: 0.5em;
-    width: 50%;
-`;
-const SubmitButtonContainer = styled.div`
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-top: 1em;
+    flex-direction: column;
+    align-content: center;
+    justify-content: space-evenly;
+
+    label {
+        text-align: center;
+        margin-top: 0.5em;
+    }
+    textarea{
+        margin-top: 0.25em;
+        width: 80%;
+    }
+    input{
+        margin-top: 0.25em;
+        width: 80%;
+    }
+    button{
+        margin-top: 1em;
+        width: 35%;
+    }
 `;
 
 const CreateCard: React.FC = (props): JSX.Element => {
@@ -77,29 +72,17 @@ const CreateCard: React.FC = (props): JSX.Element => {
             <div ref={createPopupContainer} className={className}>
                 <CreateCardHeader>Share a link!</CreateCardHeader>
                 <CreateCardForm>
-                    <CreateCardInputGroup>
-                        <CreateCardInputLabel>Title</CreateCardInputLabel>
-                        <CreateCardLineInput></CreateCardLineInput>
-                    </CreateCardInputGroup>
-                    <CreateCardInputGroup>
-                        <CreateCardInputLabel>Teaser</CreateCardInputLabel>
-                        <CreateCardTextAreaInput rows={2}></CreateCardTextAreaInput>
-                    </CreateCardInputGroup>
-                    <CreateCardInputGroup>
-                        <CreateCardInputLabel>Content</CreateCardInputLabel>
-                        <CreateCardTextAreaInput rows={4}></CreateCardTextAreaInput>
-                    </CreateCardInputGroup>
-                    <CreateCardInputGroup>
-                        <CreateCardInputLabel>Link</CreateCardInputLabel>
-                        <CreateCardLineInput></CreateCardLineInput>
-                    </CreateCardInputGroup>
-                    <CreateCardInputGroup>
-                        <CreateCardInputLabel>(Optional) Image Link</CreateCardInputLabel>
-                        <CreateCardLineInput></CreateCardLineInput>
-                    </CreateCardInputGroup>
-                    <SubmitButtonContainer>
-                        <PaleVioletButton primary={true} className="expand">Submit</PaleVioletButton>
-                    </SubmitButtonContainer>
+                    <label>Title</label>
+                    <input type="text"></input>
+                    <label>Teaser</label>
+                    <textarea rows={2}></textarea>
+                    <label>Content</label>
+                    <textarea rows={4}></textarea>
+                    <label>Link</label>
+                    <input type="text"></input>
+                    <label>(Optional) Image Link</label>
+                    <input type="text"></input>
+                    <PaleVioletButton primary={true} className="expand">Submit</PaleVioletButton>
                 </CreateCardForm>
             </div>
         </CreateCardContainer>
