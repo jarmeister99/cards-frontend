@@ -4,6 +4,7 @@
     margin: 0;
     width: 40%;
     height: 85%;
+    overflow: scroll;
     z-index: 5;
     border: 1px solid gray;
     border-radius: 10px;
@@ -14,6 +15,6 @@
     }
     &.mobile {
         width: 90%;
-        height: 75%;
+        height: 90%;
     }
 }
