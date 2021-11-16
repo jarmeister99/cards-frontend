@@ -19,9 +19,6 @@ const CreateCardContainer = styled.div`
     flex-direction: row;
     justify-content: center;
     margin-top: 1.5em;
-    * {
-        margin: 0 1em;
-    }
 `;
 const CreateCardHeader = styled.span`
     display: flex;
@@ -76,8 +73,7 @@ const CreateCard: React.FC = (props): JSX.Element => {
     // TODO: Make sure mobile users can tap to exit
     const className = "create-form" + (formActive ? " active" : "") + (isDesktop ? "" : " mobile");
     return (
-        <CreateCardContainer>
-            <PaleVioletButton primary={true} className="expand" onClick={showForm}>Create</PaleVioletButton>
+        <>
             <div ref={createPopupContainer} className={className}>
                 <CreateCardHeader>Share a link!</CreateCardHeader>
                 <CreateCardForm>
@@ -94,7 +90,10 @@ const CreateCard: React.FC = (props): JSX.Element => {
                     <PaleVioletButton primary={true} className="expand">Submit</PaleVioletButton>
                 </CreateCardForm>
             </div>
-        </CreateCardContainer>
+            <CreateCardContainer>
+                <PaleVioletButton primary={true} className="expand" onClick={showForm}>Create</PaleVioletButton>
+            </CreateCardContainer>
+        </>
     )
 }
 

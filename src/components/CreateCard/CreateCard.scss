@@ -2,6 +2,8 @@
     position: fixed;
     top: 5%;
     margin: 0;
+    left: 30%;
+    top: 7.5%;
     width: 40%;
     height: 85%;
     overflow: scroll;
@@ -14,7 +16,9 @@
         visibility: visible !important;
     }
     &.mobile {
-        width: 90%;
-        height: 90%;
+        left: 0%;
+        top: 0%;
+        width: 100%;
+        height: 100%;
     }
 }
