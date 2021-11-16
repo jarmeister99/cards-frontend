@@ -147,7 +147,8 @@ const Card: React.FC<ICard> = (props: ICard): JSX.Element => {
             className={"mobile card-container" + (flipped ? " flipped" : "")} 
             onTouchStart={startSwipeDetection}
             onTouchEnd={endSwipeDetection}
-            onTouchMove={trackSwipe}>
+            onTouchMove={trackSwipe}
+            ref={mobileCardContainer}>
                 <Front img_url={props.img_url} title={props.title} teaser={props.teaser} tags={props.tags}/>
                 <Back content={props.content}/>
             </CardContainer>  
