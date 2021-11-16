@@ -36,17 +36,20 @@ const CreateCardForm = styled.form`
     flex-direction: column;
     align-content: center;
     justify-content: space-between;
-
+      
     label {
         text-align: center;
         margin-top: 0.5em;
+        margin-bottom: 0.1em;
     }
     textarea{
         margin-top: 0.5em;
+        margin-bottom: 0.1em;
         width: 80%;
     }
     input{
         margin-top: 0.5em;
+        margin-bottom: 0.1em;
         width: 80%;
     }
     button{
