@@ -2,8 +2,9 @@ import React from 'react'
 import styled from 'styled-components';
 
 const TagFilterInput = styled.input`
-    width: 100%;
+    width: 90%;
     margin: auto;
+    box-sizing: border-box;
     border-radius: 5px;
     padding: 10px;
     border: 1px solid gray;
@@ -15,9 +16,7 @@ const TagFilterInput = styled.input`
 
 const TagFilter: React.FC = (props): JSX.Element => {
     return (
-        <div>
-            <TagFilterInput></TagFilterInput>
-        </div>
+        <TagFilterInput></TagFilterInput>
     )
 }
 

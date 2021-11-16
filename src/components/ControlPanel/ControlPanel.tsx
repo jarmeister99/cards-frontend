@@ -6,9 +6,14 @@ import TagFilter from '../TagFilter/TagFilter';
 
 const ControlPanelContainer = styled.div`
     margin: auto;
-    width: 50%;
     margin-top: 2.5em;
     margin-bottom: 1em;
+
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-content: center;
+    justify-content: space-evenly;
 `;
 
 const ControlPanel: React.FC = (props): JSX.Element => {
