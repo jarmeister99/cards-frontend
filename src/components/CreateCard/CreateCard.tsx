@@ -35,18 +35,18 @@ const CreateCardForm = styled.form`
     flex-wrap: wrap;
     flex-direction: column;
     align-content: center;
-    justify-content: space-evenly;
+    justify-content: space-between;
 
     label {
         text-align: center;
         margin-top: 0.5em;
     }
     textarea{
-        margin-top: 0.25em;
+        margin-top: 0.5em;
         width: 80%;
     }
     input{
-        margin-top: 0.25em;
+        margin-top: 0.5em;
         width: 80%;
     }
     button{
@@ -68,7 +68,6 @@ const CreateCard: React.FC = (props): JSX.Element => {
         // TODO: would really like if we blurred the body here
         setFormActive(true);
         createPopupContainer.current?.addEventListener("mouseleave", exitFormListener)
-        console.log(`Added event listener to ${createPopupContainer.current}`)
     }
 
     // TODO: Make sure mobile users can tap to exit
