@@ -42,8 +42,7 @@ const CreateCardForm = styled.form`
         width: 80%;
     }
     button{
-        margin-top: 1em;
-        width: 35%;
+        margin: 1em auto;
     }
 `;
 
