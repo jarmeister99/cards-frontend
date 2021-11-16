@@ -104,7 +104,7 @@ const Card: React.FC<ICard> = (props: ICard): JSX.Element => {
             const element_width = mobileCardContainer.current?.offsetWidth; // TODO: our percentage seems to be incorrect on an actual phone - figure this out please?
             if (element_width !== undefined){ 
                 const swipe_percentage = x_delta / element_width;
-                if (swipe_percentage > 0.35){
+                if (swipe_percentage > 0.25){
                     flip();
                 }
             }
@@ -114,6 +114,10 @@ const Card: React.FC<ICard> = (props: ICard): JSX.Element => {
     const startSwipeDetection = (e: SyntheticEvent) => {
         if (e.nativeEvent instanceof TouchEvent) { // Just making typescript happy - TODO clean this up
             startTouchPos.current = {
+                x: e.nativeEvent.targetTouches[0].clientX,
+                y: e.nativeEvent.targetTouches[0].clientY,
+            }
+            touchPos.current = {
                 x: e.nativeEvent.targetTouches[0].clientX,
                 y: e.nativeEvent.targetTouches[0].clientY,
             }
