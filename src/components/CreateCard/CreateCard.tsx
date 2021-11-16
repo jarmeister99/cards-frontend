@@ -6,6 +6,14 @@ import { PaleVioletButton } from '../Generic/Buttons/Buttons';
 import '../Generic/Buttons/Buttons.scss';
 import './CreateCard.scss';
 
+interface CreateCardPayload {
+    title: string;
+    teaser: string;
+    content: string;
+    link: string;
+    image_link?: string;
+};
+
 const CreateCardContainer = styled.div`
     display: flex;
     flex-direction: row;
