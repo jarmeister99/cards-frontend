@@ -144,7 +144,6 @@ const CreateCard: React.FC = (props): JSX.Element => {
         setContent('');
         setLink('');
         setImgLink('');
-
         axios.post(`${process.env.REACT_APP_API_URI}/shares/`, formData).then(response => {
           }).catch(error => {
             console.log(error);
