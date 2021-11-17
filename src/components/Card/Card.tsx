@@ -28,7 +28,7 @@ interface Point {
 
 const CardContainer = styled.div`
     height: 20em;
-    margin: 0;
+    margin: 1em;
     padding: 0;
     top: 20px;
     width: 20%;

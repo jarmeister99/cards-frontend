@@ -39,7 +39,36 @@ function App() {
       content: 'Dummy content',
       tags: ['css', 'design', 'style'],
       img_url: retro_space
-    }
+    },
+    {
+      title: 'Knowledge Base',
+      teaser: 'Contains code snippets, technical articles, and blog posts related to various technologies',
+      content: 'Dummy content',
+      tags: ['portfolio'],
+      img_url: castle1
+    },
+    {
+      title: 'Magic of CSS',
+      teaser: 'A visual tutorial of many CSS concepts',
+      link: 'https://adamschwartz.co/magic-of-css/',
+      content: 'Dummy content',
+      tags: ['css', 'design', 'style'],
+      img_url: castle2
+    },
+    {
+      title: 'Styled-Components Getting Started Guide',
+      teaser: 'A first-party beginner\'s tutorial to the styled-components library',
+      content: 'Dummy content',
+      tags: ['css', 'design', 'style', 'react'],
+      img_url: retro_fisher
+    },
+    {
+      title: 'Basic Concepts of Flexbox',
+      teaser: 'A tutorial from mozilla that explains how CSS flexbox works',
+      content: 'Dummy content',
+      tags: ['css', 'design', 'style'],
+      img_url: retro_space
+    },
   ]
   return (
     <div className="App">

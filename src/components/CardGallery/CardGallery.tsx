@@ -9,7 +9,7 @@ export interface ICardGallery {
 const CardGalleryLayout = styled.div`
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-evenly;
+    justify-content: center;
 `;
 
 const CardGallery: React.FC<ICardGallery> = (props: ICardGallery): JSX.Element => {

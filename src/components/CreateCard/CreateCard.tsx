@@ -70,6 +70,12 @@ const CreateCard: React.FC = (props): JSX.Element => {
     const touchPos = useRef<Point>({ x: 0, y: 0 });
     const isDesktop = useMediaQuery({ query: '(min-width: 1224px)' });
 
+    // states for various controlled components
+    const [title, setTitle] = useState<string>('');
+    const [teaser, setTeaser] = useState<string>('');
+    const [content, setContent] = useState<string>('');
+    const [link, setLink] = useState<string>('');
+    const [imgLink, setImgLink] = useState<string>('');
 
     const exitFormListener = (e: MouseEvent) => {
         setFormActive(false);
@@ -138,15 +144,15 @@ const CreateCard: React.FC = (props): JSX.Element => {
                 <CreateCardHeader>Share a link!</CreateCardHeader>
                 <CreateCardForm>
                     <label>Title</label>
-                    <input type="text"></input>
+                    <input value={title} onChange={e => setTitle(e.target.value)}></input>
                     <label>Teaser</label>
-                    <textarea rows={2}></textarea>
+                    <textarea style={{resize: "none"}} rows={2} value={teaser} onChange={e => setTeaser(e.target.value)}></textarea>
                     <label>Content</label>
-                    <textarea rows={4}></textarea>
+                    <textarea style={{resize: "none"}} rows={4} value={content} onChange={e => setContent(e.target.value)}></textarea>
                     <label>Link</label>
-                    <input type="text"></input>
+                    <input value={link} onChange={e => setLink(e.target.value)}></input>
                     <label>(Optional) Image Link</label>
-                    <input type="text"></input>
+                    <input value={imgLink} onChange={e => setImgLink(e.target.value)}></input>
                     <PaleVioletButton primary={true} className="expand">Submit</PaleVioletButton>
                 </CreateCardForm>
             </div>
