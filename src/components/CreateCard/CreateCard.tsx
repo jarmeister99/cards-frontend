@@ -144,6 +144,14 @@ const CreateCard: React.FC<ICreateCard> = (props: ICreateCard): JSX.Element => {
         setLink('');
         setImgUrl('');
         axios.post(`${process.env.REACT_APP_API_URI}/shares/`, formData).then(response => {
+            const createdCard: ICard = {
+                title: response.data.title,
+                teaser: response.data.teaser,
+                content: response.data.content,
+                link: response.data.link,
+                img_url: response.data.img_url
+            }
+            props.setCards([...props.cards, createdCard])
           }).catch(error => {
             console.log(error);
           })
