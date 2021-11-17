@@ -1,4 +1,6 @@
 import React from 'react';
+import {Helmet} from "react-helmet";
+
 import { ICard } from './components/Card/Card';
 import ControlPanel from './components/ControlPanel/ControlPanel';
 import CardGallery from './components/CardGallery/CardGallery';
@@ -72,6 +74,9 @@ function App() {
   ]
   return (
     <div className="App">
+      <Helmet>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"></meta>
+      </Helmet>
       <ControlPanel />
       <CardGallery cards={cards} />
     </div>
