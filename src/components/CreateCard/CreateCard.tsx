@@ -19,6 +19,7 @@ const CreateCardContainer = styled.div`
     flex-direction: row;
     justify-content: center;
     margin-top: 1.5em;
+    touch-action: none;
 `;
 const CreateCardHeader = styled.span`
     display: flex;
@@ -26,8 +27,10 @@ const CreateCardHeader = styled.span`
     justify-content: center;
     margin-top: 1em;
     font-size: 2em;
+    touch-action: none;
 `;
 const CreateCardForm = styled.form`
+    touch-action: none;
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
