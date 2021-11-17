@@ -2,18 +2,12 @@ import axios from 'axios';
 import React, { SyntheticEvent, useRef, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import styled from 'styled-components';
+import { ICard } from '../Card/Card';
 
 import { PaleVioletButton } from '../Generic/Buttons/Buttons';
 import '../Generic/Buttons/Buttons.scss';
 import './CreateCard.scss';
 
-interface CreateCardPayload {
-    title: string;
-    teaser: string;
-    content: string;
-    link: string;
-    imgLink?: string;
-};
 interface Point {
     x: number;
     y: number;
@@ -76,7 +70,7 @@ const CreateCard: React.FC = (props): JSX.Element => {
     const [teaser, setTeaser] = useState<string>('');
     const [content, setContent] = useState<string>('');
     const [link, setLink] = useState<string>('');
-    const [imgLink, setImgLink] = useState<string>('');
+    const [img_url, setImgUrl] = useState<string>('');
 
     const exitFormListener = (e: MouseEvent) => {
         setFormActive(false);
@@ -133,17 +127,17 @@ const CreateCard: React.FC = (props): JSX.Element => {
 
     const submitForm = (e: SyntheticEvent) => {
         e.preventDefault();
-        const formData: CreateCardPayload = {} as CreateCardPayload;
+        const formData: ICard = {} as ICard;
         formData.title = title;
         formData.teaser = teaser;
         formData.content = content;
         formData.link = link;
-        formData.imgLink = imgLink;
+        formData.img_url = img_url;
         setTitle('');
         setTeaser('');
         setContent('');
         setLink('');
-        setImgLink('');
+        setImgUrl('');
         axios.post(`${process.env.REACT_APP_API_URI}/shares/`, formData).then(response => {
           }).catch(error => {
             console.log(error);
@@ -173,8 +167,8 @@ const CreateCard: React.FC = (props): JSX.Element => {
                     <textarea style={{resize: "none"}} rows={4} value={content} onChange={e => setContent(e.target.value)}></textarea>
                     <label>Link</label>
                     <input value={link} onChange={e => setLink(e.target.value)}></input>
-                    <label>(Optional) Image Link</label>
-                    <input value={imgLink} onChange={e => setImgLink(e.target.value)}></input>
+                    <label>(Optional) Image URL</label>
+                    <input value={img_url} onChange={e => setImgUrl(e.target.value)}></input>
                     <PaleVioletButton primary={true} className="expand" onClick={submitForm}>Submit</PaleVioletButton>
                 </CreateCardForm>
             </div>
