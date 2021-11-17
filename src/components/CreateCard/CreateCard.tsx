@@ -42,12 +42,14 @@ const CreateCardForm = styled.form`
     textarea{
         margin-top: 0.5em;
         margin-bottom: 0.1em;
-        width: 80%;
+        // width: 75%;
+        width: min(75%, 20em);
     }
     input{
         margin-top: 0.5em;
         margin-bottom: 0.1em;
-        width: 80%;
+        // width: 75%;
+        width: min(75%, 20em);
     }
     button{
         margin: 1em auto;
