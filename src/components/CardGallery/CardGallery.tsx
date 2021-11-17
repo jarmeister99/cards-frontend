@@ -8,8 +8,11 @@ const CardGalleryLayout = styled.div`
     flex-wrap: wrap;
     justify-content: center;
 `;
+interface ICardGallery {
+    cards: ICard[];
+}
 
-const CardGallery: React.FC = (props): JSX.Element => {
+const CardGallery: React.FC<ICardGallery> = (props: ICardGallery): JSX.Element => {
     const [cards, setCards] = useState<ICard[]>([]);
 
     useEffect(() => {

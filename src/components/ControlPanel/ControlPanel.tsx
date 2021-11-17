@@ -1,8 +1,14 @@
 import React from 'react'
 import styled from 'styled-components';
+import { ICard } from '../Card/Card';
 
 import CreateCard from '../CreateCard/CreateCard';
 import TagFilter from '../TagFilter/TagFilter';
+
+interface IControlPanel {
+    cards: ICard[];
+    setCards: React.Dispatch<React.SetStateAction<ICard[]>>
+}
 
 const ControlPanelContainer = styled.div`
     margin: auto;
@@ -15,11 +21,11 @@ const ControlPanelContainer = styled.div`
     justify-content: space-evenly;
 `;
 
-const ControlPanel: React.FC = (props): JSX.Element => {
+const ControlPanel: React.FC<IControlPanel> = (props: IControlPanel): JSX.Element => {
     return (
         <ControlPanelContainer>
             <TagFilter />
-            <CreateCard />
+            <CreateCard cards={props.cards} setCards={props.setCards} />
         </ControlPanelContainer>
     )
 }

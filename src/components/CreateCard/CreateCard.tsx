@@ -8,6 +8,11 @@ import { PaleVioletButton } from '../Generic/Buttons/Buttons';
 import '../Generic/Buttons/Buttons.scss';
 import './CreateCard.scss';
 
+interface ICreateCard {
+    cards: ICard[];
+    setCards: React.Dispatch<React.SetStateAction<ICard[]>>
+}
+
 interface Point {
     x: number;
     y: number;
@@ -58,7 +63,7 @@ const CreateCardForm = styled.form`
     }
 `;
 
-const CreateCard: React.FC = (props): JSX.Element => {
+const CreateCard: React.FC<ICreateCard> = (props: ICreateCard): JSX.Element => {
     const [formActive, setFormActive] = useState<Boolean>(false);
     const createPopupContainer = useRef<HTMLDivElement>(null);
     const startTouchPos = useRef<Point>({ x: 0, y: 0 });
