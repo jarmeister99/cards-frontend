@@ -11,6 +11,7 @@ export interface ICard {
     link?: string;
     tags?: string[];
     img_url: string;
+    _id?: {$oid: string};
 };
 interface ICardBack {
     content: string;

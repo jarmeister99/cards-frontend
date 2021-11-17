@@ -19,7 +19,6 @@ function App() {
     })
   }, []);
 
-  console.log(`re-rendering with cards: ${JSON.stringify(cards)}`)
   return (
     <div className="App">
       <Helmet>
