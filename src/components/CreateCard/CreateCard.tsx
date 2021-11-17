@@ -145,6 +145,7 @@ const CreateCard: React.FC = (props): JSX.Element => {
         setLink('');
         setImgLink('');
         exitForm();
+        console.log(process.env.REACT_APP_API_URI)
     }
 
     // TODO: Make sure mobile users can tap to exit
