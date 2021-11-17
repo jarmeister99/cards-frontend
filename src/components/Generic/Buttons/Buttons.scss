@@ -1,7 +1,8 @@
 .expand {
     &:hover {
         box-shadow: rgba(0, 0, 0, 0.25) 0px 3px 8px;
-        transition: all 0.15s;
+        transition: transform 0.15s;
+        transition: box-shadow 0.15s;
         transform: scale(1.2);
     }
     &:not(:hover) {

@@ -11,7 +11,7 @@ interface CreateCardPayload {
     teaser: string;
     content: string;
     link: string;
-    image_link?: string;
+    imgLink?: string;
 };
 interface Point {
     x: number;
@@ -130,6 +130,23 @@ const CreateCard: React.FC = (props): JSX.Element => {
         }
     }
 
+    const submitForm = (e: SyntheticEvent) => {
+        e.preventDefault();
+        const formData: CreateCardPayload = {} as CreateCardPayload;
+        formData.title = title;
+        formData.teaser = teaser;
+        formData.content = content;
+        formData.link = link;
+        formData.imgLink = imgLink;
+        console.log(formData);
+        setTitle('');
+        setTeaser('');
+        setContent('');
+        setLink('');
+        setImgLink('');
+        exitForm();
+    }
+
     // TODO: Make sure mobile users can tap to exit
     const className = "create-form" + (formActive ? " active" : "") + (isDesktop ? "" : " mobile");
     return (
@@ -153,7 +170,7 @@ const CreateCard: React.FC = (props): JSX.Element => {
                     <input value={link} onChange={e => setLink(e.target.value)}></input>
                     <label>(Optional) Image Link</label>
                     <input value={imgLink} onChange={e => setImgLink(e.target.value)}></input>
-                    <PaleVioletButton primary={true} className="expand">Submit</PaleVioletButton>
+                    <PaleVioletButton primary={true} className="expand" onClick={submitForm}>Submit</PaleVioletButton>
                 </CreateCardForm>
             </div>
             <CreateCardContainer>
