@@ -1,13 +1,15 @@
+.noscroll { overflow: hidden; }
+
 .create-form {
-    touch-action: none;
+    // touch-action: none;
     position: fixed;
     top: 5%;
     margin: 0;
-    left: 30%;
+    left: 40%;
     top: 7.5%;
-    width: 40%;
-    height: 85%;
-    overflow: auto;
+    width: 20%;
+    height: 50%;
+    overflow-y: auto;
     z-index: 5;
     border: 1px solid gray;
     border-radius: 10px;

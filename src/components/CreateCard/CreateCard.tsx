@@ -13,6 +13,10 @@ interface CreateCardPayload {
     link: string;
     image_link?: string;
 };
+interface Point {
+    x: number;
+    y: number;
+};
 
 const CreateCardContainer = styled.div`
     display: flex;
@@ -62,24 +66,75 @@ const CreateCardForm = styled.form`
 const CreateCard: React.FC = (props): JSX.Element => {
     const [formActive, setFormActive] = useState<Boolean>(false);
     const createPopupContainer = useRef<HTMLDivElement>(null);
+    const startTouchPos = useRef<Point>({ x: 0, y: 0 });
+    const touchPos = useRef<Point>({ x: 0, y: 0 });
     const isDesktop = useMediaQuery({ query: '(min-width: 1224px)' });
+
 
     const exitFormListener = (e: MouseEvent) => {
         setFormActive(false);
+        document.body.classList.remove('noscroll')
         createPopupContainer.current?.removeEventListener("mouseleave", exitFormListener)
-
+    }
+    const exitForm = () => {
+        setFormActive(false);
+        document.body.classList.remove('noscroll')
+        createPopupContainer.current?.removeEventListener("mouseleave", exitFormListener)
     }
     const showForm = (e: SyntheticEvent) => {
         // TODO: would really like if we blurred the body here
         setFormActive(true);
+        document.body.classList.add('noscroll')
         createPopupContainer.current?.addEventListener("mouseleave", exitFormListener)
+    }
+
+    // mobile swipe detection logic
+    const endSwipeDetection = (e: SyntheticEvent) => {
+        if (e.nativeEvent instanceof TouchEvent) { // Just making typescript happy - TODO clean this up
+            const x_delta = Math.abs(startTouchPos.current.x - touchPos.current.x)
+            const element_width = createPopupContainer.current?.offsetWidth; // TODO: our percentage seems to be incorrect on an actual phone - figure this out please?
+            if (element_width !== undefined){ 
+                const swipe_percentage = x_delta / element_width;
+                if (swipe_percentage > 0.25){
+                    exitForm();
+                }
+            }
+
+        }
+    }
+    const startSwipeDetection = (e: SyntheticEvent) => {
+        if (e.nativeEvent instanceof TouchEvent) { // Just making typescript happy - TODO clean this up
+            startTouchPos.current = {
+                x: e.nativeEvent.targetTouches[0].clientX,
+                y: e.nativeEvent.targetTouches[0].clientY,
+            }
+            touchPos.current = {
+                x: e.nativeEvent.targetTouches[0].clientX,
+                y: e.nativeEvent.targetTouches[0].clientY,
+            }
+        }
+    }
+    const trackSwipe = (e: SyntheticEvent) => {
+        e.stopPropagation();
+        if (e.nativeEvent instanceof TouchEvent) { // Just making typescript happy - TODO clean this up
+            touchPos.current = {
+                x: e.nativeEvent.targetTouches[0].clientX,
+                y: e.nativeEvent.targetTouches[0].clientY,
+            }
+        }
     }
 
     // TODO: Make sure mobile users can tap to exit
     const className = "create-form" + (formActive ? " active" : "") + (isDesktop ? "" : " mobile");
     return (
         <>
-            <div ref={createPopupContainer} className={className}>
+            <div 
+            ref={createPopupContainer} 
+            className={className}
+            onTouchStart={startSwipeDetection}
+            onTouchEnd={endSwipeDetection}
+            onTouchMove={trackSwipe}
+            >
                 <CreateCardHeader>Share a link!</CreateCardHeader>
                 <CreateCardForm>
                     <label>Title</label>
