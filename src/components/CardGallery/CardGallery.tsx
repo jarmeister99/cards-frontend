@@ -3,22 +3,18 @@ import Card, { ICard } from '../Card/Card';
 import styled from 'styled-components'
 import axios from 'axios';
 
-export interface ICardGallery {
-    cards: ICard[];
-}
-
 const CardGalleryLayout = styled.div`
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
 `;
 
-const CardGallery: React.FC<ICardGallery> = (props: ICardGallery): JSX.Element => {
-    const [shares, setShares] = useState([]);
+const CardGallery: React.FC = (props): JSX.Element => {
+    const [cards, setCards] = useState<ICard[]>([]);
 
     useEffect(() => {
         axios.get(`${process.env.REACT_APP_API_URI}/shares/`).then(response => {
-            console.log(response);
+            setCards(response.data)
         }).catch(error => {
             console.log(error);
         })
@@ -26,7 +22,7 @@ const CardGallery: React.FC<ICardGallery> = (props: ICardGallery): JSX.Element =
 
     return (
         <CardGalleryLayout>
-            {props.cards.map(c => <Card title={c.title} teaser={c.teaser} link={c.link} content={c.content} tags={c.tags} img_url={c.img_url} />)}
+            {cards.map(c => <Card title={c.title} teaser={c.teaser} link={c.link} content={c.content} tags={c.tags} img_url={c.img_url} />)}
         </CardGalleryLayout>
     )
 }
