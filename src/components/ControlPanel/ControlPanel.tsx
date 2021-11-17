@@ -7,7 +7,6 @@ import TagFilter from '../TagFilter/TagFilter';
 const ControlPanelContainer = styled.div`
     margin: auto;
     margin-top: 2.5em;
-    margin-bottom: 1em;
 
     display: flex;
     flex-wrap: wrap;
