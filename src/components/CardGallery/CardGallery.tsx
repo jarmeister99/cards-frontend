@@ -13,19 +13,9 @@ interface ICardGallery {
 }
 
 const CardGallery: React.FC<ICardGallery> = (props: ICardGallery): JSX.Element => {
-    const [cards, setCards] = useState<ICard[]>([]);
-
-    useEffect(() => {
-        axios.get(`${process.env.REACT_APP_API_URI}/shares/`).then(response => {
-            setCards(response.data)
-        }).catch(error => {
-            console.log(error);
-        })
-    }, []);
-
     return (
         <CardGalleryLayout>
-            {cards.map(c => <Card title={c.title} teaser={c.teaser} link={c.link} content={c.content} tags={c.tags} img_url={c.img_url} />)}
+            {props.cards.map(c => <Card title={c.title} teaser={c.teaser} link={c.link} content={c.content} tags={c.tags} img_url={c.img_url} />)}
         </CardGalleryLayout>
     )
 }
