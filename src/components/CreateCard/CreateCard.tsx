@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { SyntheticEvent, useRef, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import styled from 'styled-components';
@@ -138,14 +139,18 @@ const CreateCard: React.FC = (props): JSX.Element => {
         formData.content = content;
         formData.link = link;
         formData.imgLink = imgLink;
-        console.log(formData);
         setTitle('');
         setTeaser('');
         setContent('');
         setLink('');
         setImgLink('');
+
+        axios.post(`${process.env.REACT_APP_API_URI}/shares/`, formData).then(response => {
+          }).catch(error => {
+            console.log(error);
+          })
+
         exitForm();
-        console.log(process.env.REACT_APP_API_URI)
     }
 
     // TODO: Make sure mobile users can tap to exit
