@@ -7,6 +7,7 @@ import CardGallery from './components/CardGallery/CardGallery';
 
 import axios from 'axios';
 
+import './app.scss'
 
 function App() {
   const [cards, setCards] = useState<ICard[]>([]);
