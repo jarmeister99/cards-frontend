@@ -8,7 +8,7 @@ export interface ICard {
     title: string;
     teaser: string;
     content: string;
-    link?: string;
+    link: string;
     tags?: string[];
     img_url: string;
     _id?: {$oid: string};
@@ -107,6 +107,9 @@ const Card: React.FC<ICard> = (props: ICard): JSX.Element => {
                 const swipe_percentage = x_delta / element_width;
                 if (swipe_percentage > 0.25){
                     flip();
+                }
+                else if (swipe_percentage < 0.05){
+                    window.location.href = props.link;
                 }
             }
 
