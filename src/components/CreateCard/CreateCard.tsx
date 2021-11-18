@@ -76,6 +76,8 @@ const CreateCard: React.FC<ICreateCard> = (props: ICreateCard): JSX.Element => {
     const [content, setContent] = useState<string>('');
     const [link, setLink] = useState<string>('');
     const [img_url, setImgUrl] = useState<string>('');
+    const [tag_entry, setTagEntry] = useState<string>('');
+    const [tags, setTags] = useState<string[]>([]);
 
     const exitFormListener = (e: MouseEvent) => {
         setFormActive(false);
@@ -138,18 +140,22 @@ const CreateCard: React.FC<ICreateCard> = (props: ICreateCard): JSX.Element => {
         formData.content = content;
         formData.link = link;
         formData.img_url = img_url;
+        formData.tags = tags;
         setTitle('');
         setTeaser('');
         setContent('');
         setLink('');
         setImgUrl('');
+        setTags([]);
+        setTagEntry('');
         axios.post(`${process.env.REACT_APP_API_URI}/shares/`, formData).then(response => {
             const createdCard: ICard = {
                 title: response.data.title,
                 teaser: response.data.teaser,
                 content: response.data.content,
                 link: response.data.link,
-                img_url: response.data.img_url
+                img_url: response.data.img_url,
+                tags: response.data.tags
             }
             props.setCards([...props.cards, createdCard])
           }).catch(error => {
@@ -157,6 +163,23 @@ const CreateCard: React.FC<ICreateCard> = (props: ICreateCard): JSX.Element => {
           })
 
         exitForm();
+    }
+
+    const handleTagEntry = (e: SyntheticEvent) => {
+        if (e.nativeEvent instanceof InputEvent) { // Just making typescript happy - TODO clean this up
+            if (e.nativeEvent.data === ' '){
+                if (!(tags.includes(tag_entry) || tag_entry === '')){
+                    setTags([...tags, tag_entry]);
+                    setTagEntry('');
+                }
+                else{
+                    setTagEntry('');
+                }
+            }
+            else{
+                setTagEntry((e.target as HTMLInputElement).value)
+            }
+        }
     }
 
     // TODO: Make sure mobile users can tap to exit
@@ -182,7 +205,12 @@ const CreateCard: React.FC<ICreateCard> = (props: ICreateCard): JSX.Element => {
                     <input value={link} onChange={e => setLink(e.target.value)}></input>
                     <label>(Optional) Image URL</label>
                     <input value={img_url} onChange={e => setImgUrl(e.target.value)}></input>
+                    <label>(Optional) Tags</label>
+                    <input value={tag_entry} onChange={handleTagEntry}></input>
                     <PaleVioletButton primary={true} className="expand" onClick={submitForm}>Submit</PaleVioletButton>
+                    <div style={{display: "flex", justifyContent: "space-evenly"}}>
+                        {tags.map(t => <span key={t}>{t}</span>)}
+                    </div>
                 </CreateCardForm>
             </div>
             <CreateCardContainer>

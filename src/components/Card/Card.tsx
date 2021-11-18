@@ -171,7 +171,7 @@ const Front: React.FC<ICardFront> = (props: ICardFront): JSX.Element => {
             </ImageContainer>
             <TitleContainer><TitleSpan>{props.title}</TitleSpan></TitleContainer>
             <TeaserContainer>{props.teaser}</TeaserContainer>
-            { props.tags && <TagsContainer>{props.tags.map(t => <TagSpan>{t}</TagSpan>)}</TagsContainer> }
+            { props.tags && <TagsContainer>{props.tags.map(t => <TagSpan key={t}>{t}</TagSpan>)}</TagsContainer> }
         </div>
     )
 }
