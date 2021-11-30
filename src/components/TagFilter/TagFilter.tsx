@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { SyntheticEvent, useEffect, useState } from 'react'
 import styled from 'styled-components';
+import { ICard } from '../Card/Card';
 
 const TagFilterInput = styled.input`
     width: max(30%, 300px);
@@ -13,10 +14,45 @@ const TagFilterInput = styled.input`
         outline: none;
     }
 `;
+interface ITagFilter {
+    cards: ICard[];
+    setCards: React.Dispatch<React.SetStateAction<ICard[]>>
+}
+const TagFilter: React.FC<ITagFilter> = (props: ITagFilter): JSX.Element => {
+    const [tagEntry, setTagEntry] = useState<string>('');
+    const [selectedTags, setSelectedTags] = useState<string[]>([]);
+    const cards = props.cards;
+    const setCards = props.setCards;
 
-const TagFilter: React.FC = (props): JSX.Element => {
+    // TODO: this is duplicate code from createcard - fix that.
+    const handleTagEntry = (e: SyntheticEvent) => {
+        if (e.nativeEvent instanceof InputEvent) { // Just making typescript happy - TODO clean this up
+            if (e.nativeEvent.data === ' ') {
+                if (!(selectedTags.includes(tagEntry) || tagEntry === '')) {
+                    setSelectedTags([...selectedTags, tagEntry]);
+                    setTagEntry('');
+                }
+                else {
+                    setTagEntry('');
+                }
+            }
+            else {
+                setTagEntry((e.target as HTMLInputElement).value)
+            }
+        }
+    }
+    useEffect(() => {
+        setCards(cards.filter(card => (  // for each card, if the card has a single tag that is within the selectedTags, return true
+            card.tags?.some(cardTag => selectedTags.includes(cardTag))
+        )))
+    }, [selectedTags])
     return (
-        <TagFilterInput></TagFilterInput>
+        <>
+            <TagFilterInput onChange={handleTagEntry} value={tagEntry}></TagFilterInput>
+            <div style={{ display: "flex", justifyContent: "space-evenly", marginTop: "1em" }}>
+                {selectedTags.map(t => <span key={t}>{t}</span>)}
+            </div>
+        </>
     )
 }
 

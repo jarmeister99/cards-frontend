@@ -24,7 +24,7 @@ const ControlPanelContainer = styled.div`
 const ControlPanel: React.FC<IControlPanel> = (props: IControlPanel): JSX.Element => {
     return (
         <ControlPanelContainer>
-            <TagFilter />
+            <TagFilter cards={props.cards} setCards={props.setCards}/>
             <CreateCard cards={props.cards} setCards={props.setCards} />
         </ControlPanelContainer>
     )
