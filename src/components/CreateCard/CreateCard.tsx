@@ -101,9 +101,9 @@ const CreateCard: React.FC<ICreateCard> = (props: ICreateCard): JSX.Element => {
         if (e.nativeEvent instanceof TouchEvent) { // Just making typescript happy - TODO clean this up
             const x_delta = Math.abs(startTouchPos.current.x - touchPos.current.x)
             const element_width = createPopupContainer.current?.offsetWidth; // TODO: our percentage seems to be incorrect on an actual phone - figure this out please?
-            if (element_width !== undefined){ 
+            if (element_width !== undefined) {
                 const swipe_percentage = x_delta / element_width;
-                if (swipe_percentage > 0.25){
+                if (swipe_percentage > 0.25) {
                     exitForm();
                 }
             }
@@ -158,25 +158,25 @@ const CreateCard: React.FC<ICreateCard> = (props: ICreateCard): JSX.Element => {
                 tags: response.data.tags
             }
             props.setCards([...props.cards, createdCard])
-          }).catch(error => {
+        }).catch(error => {
             console.log(error);
-          })
+        })
 
         exitForm();
     }
 
     const handleTagEntry = (e: SyntheticEvent) => {
         if (e.nativeEvent instanceof InputEvent) { // Just making typescript happy - TODO clean this up
-            if (e.nativeEvent.data === ' '){
-                if (!(tags.includes(tag_entry) || tag_entry === '')){
+            if (e.nativeEvent.data === ' ') {
+                if (!(tags.includes(tag_entry) || tag_entry === '')) {
                     setTags([...tags, tag_entry]);
                     setTagEntry('');
                 }
-                else{
+                else {
                     setTagEntry('');
                 }
             }
-            else{
+            else {
                 setTagEntry((e.target as HTMLInputElement).value)
             }
         }
@@ -186,21 +186,21 @@ const CreateCard: React.FC<ICreateCard> = (props: ICreateCard): JSX.Element => {
     const className = "create-form" + (formActive ? " active" : "") + (isDesktop ? "" : " mobile");
     return (
         <>
-            <div 
-            ref={createPopupContainer} 
-            className={className}
-            onTouchStart={startSwipeDetection}
-            onTouchEnd={endSwipeDetection}
-            onTouchMove={trackSwipe}
+            <div
+                ref={createPopupContainer}
+                className={className}
+                onTouchStart={startSwipeDetection}
+                onTouchEnd={endSwipeDetection}
+                onTouchMove={trackSwipe}
             >
                 <CreateCardHeader>Share a link!</CreateCardHeader>
                 <CreateCardForm>
                     <label>Title</label>
                     <input value={title} onChange={e => setTitle(e.target.value)}></input>
                     <label>Teaser</label>
-                    <textarea style={{resize: "none"}} rows={2} value={teaser} onChange={e => setTeaser(e.target.value)}></textarea>
+                    <textarea style={{ resize: "none" }} rows={2} value={teaser} onChange={e => setTeaser(e.target.value)}></textarea>
                     <label>Content</label>
-                    <textarea style={{resize: "none"}} rows={4} value={content} onChange={e => setContent(e.target.value)}></textarea>
+                    <textarea style={{ resize: "none" }} rows={4} value={content} onChange={e => setContent(e.target.value)}></textarea>
                     <label>Link</label>
                     <input value={link} onChange={e => setLink(e.target.value)}></input>
                     <label>(Optional) Image URL</label>
@@ -208,7 +208,7 @@ const CreateCard: React.FC<ICreateCard> = (props: ICreateCard): JSX.Element => {
                     <label>(Optional) Tags</label>
                     <input value={tag_entry} onChange={handleTagEntry}></input>
                     <PaleVioletButton primary={true} className="expand" onClick={submitForm}>Submit</PaleVioletButton>
-                    <div style={{display: "flex", justifyContent: "space-evenly"}}>
+                    <div style={{ display: "flex", justifyContent: "space-evenly" }}>
                         {tags.map(t => <span key={t}>{t}</span>)}
                     </div>
                 </CreateCardForm>
