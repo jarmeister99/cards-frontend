@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components';
 
 const TagFilterInput = styled.input`
-    width: 90%;
+    width: max(30%, 300px);
     margin: auto;
     box-sizing: border-box;
     border-radius: 5px;
