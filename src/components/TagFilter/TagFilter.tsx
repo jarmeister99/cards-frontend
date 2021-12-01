@@ -1,5 +1,7 @@
 import React, { SyntheticEvent, useEffect, useState } from 'react'
 import styled from 'styled-components';
+import { useAppSelector, useAppDispatch } from '../../app/hooks';
+import { filter, selectCards } from '../../features/cards/cardSlice';
 import { ICard } from '../Card/Card';
 
 const TagFilterInput = styled.input`
@@ -15,14 +17,18 @@ const TagFilterInput = styled.input`
     }
 `;
 interface ITagFilter {
-    cards: ICard[];
-    setCards: React.Dispatch<React.SetStateAction<ICard[]>>
 }
+
 const TagFilter: React.FC<ITagFilter> = (props: ITagFilter): JSX.Element => {
     const [tagEntry, setTagEntry] = useState<string>('');
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
-    const cards = props.cards;
-    const setCards = props.setCards;
+    
+    const dispatch = useAppDispatch();
+  
+    // filter cards based on selected tags every time they change
+    useEffect(() => {
+      dispatch(filter(selectedTags))
+    }, [dispatch, selectedTags])  // dispatch is guaranteed to be stable and does not need to be included here. 
 
     // TODO: this is duplicate code from createcard - fix that.
     const handleTagEntry = (e: SyntheticEvent) => {
@@ -41,11 +47,6 @@ const TagFilter: React.FC<ITagFilter> = (props: ITagFilter): JSX.Element => {
             }
         }
     }
-    useEffect(() => {
-        setCards(cards.filter(card => (  // for each card, if the card has a single tag that is within the selectedTags, return true
-            card.tags?.some(cardTag => selectedTags.includes(cardTag))
-        )))
-    }, [selectedTags])
     return (
         <>
             <TagFilterInput onChange={handleTagEntry} value={tagEntry}></TagFilterInput>

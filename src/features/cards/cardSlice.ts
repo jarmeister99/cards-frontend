@@ -33,6 +33,14 @@ export const cardSlice = createSlice({
   reducers: {
     remove: (state, action: PayloadAction<String>) => {
       state.cards = state.cards.filter(card => (card._id.$oid !== action.payload))
+    },
+    filter: (state, action: PayloadAction<String[]>) => {
+      // for each card, if the card has a single tag that is within the selectedTags, return true
+      if (action.payload.length > 0){
+        state.cards = state.cards.filter(card => ( 
+          card.tags?.some((tag: String) => action.payload.includes(tag))
+        ))
+      }
     }
   },
   // The `extraReducers` field lets the slice handle actions defined elsewhere,
@@ -45,7 +53,7 @@ export const cardSlice = createSlice({
   },
 });
 
-export const { remove } = cardSlice.actions;
+export const { remove, filter } = cardSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
