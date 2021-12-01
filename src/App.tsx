@@ -26,7 +26,7 @@ function App() {
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"></meta>
       </Helmet>
       <ControlPanel setCards={setCards} cards={cards} />
-      <CardGallery cards={cards} />
+      <CardGallery/>
     </div>
   );
 }
