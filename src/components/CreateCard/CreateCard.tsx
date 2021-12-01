@@ -12,9 +12,7 @@ import TagDisplay from '../TagDisplay/TagDisplay';
 import './CreateCard.scss';
 
 interface ICreateCard {
-
 }
-
 interface Point {
     x: number;
     y: number;
@@ -66,12 +64,11 @@ const CreateCardForm = styled.form`
 `;
 
 const CreateCard: React.FC<ICreateCard> = (props: ICreateCard): JSX.Element => {
+    // allow modifying global state
     const dispatch = useAppDispatch();
+
+    // local state
     const [formActive, setFormActive] = useState<Boolean>(false);
-    const createPopupContainer = useRef<HTMLDivElement>(null);
-    const startTouchPos = useRef<Point>({ x: 0, y: 0 });
-    const touchPos = useRef<Point>({ x: 0, y: 0 });
-    const isDesktop = useMediaQuery({ query: '(min-width: 1224px)' });
 
     // states for various controlled components
     const [title, setTitle] = useState<string>('');
@@ -81,6 +78,16 @@ const CreateCard: React.FC<ICreateCard> = (props: ICreateCard): JSX.Element => {
     const [img_url, setImgUrl] = useState<string>('');
     const [tag_entry, setTagEntry] = useState<string>('');
     const [tags, setTags] = useState<string[]>([]);
+
+    // touch tracking
+    const startTouchPos = useRef<Point>({ x: 0, y: 0 });
+    const touchPos = useRef<Point>({ x: 0, y: 0 });
+
+    // responsive design
+    const isDesktop = useMediaQuery({ query: '(min-width: 1224px)' });
+
+    // local element refs
+    const createPopupContainer = useRef<HTMLDivElement>(null);
 
     const exitFormListener = (e: MouseEvent) => {
         setFormActive(false);
@@ -135,15 +142,7 @@ const CreateCard: React.FC<ICreateCard> = (props: ICreateCard): JSX.Element => {
         }
     }
 
-    const submitForm = (e: SyntheticEvent) => {
-        e.preventDefault();
-        const formData: ICard = {} as ICard;
-        formData.title = title;
-        formData.teaser = teaser;
-        formData.content = content;
-        formData.link = link;
-        formData.img_url = img_url;
-        formData.tags = tags;
+    const clearEntry = () => {
         setTitle('');
         setTeaser('');
         setContent('');
@@ -151,7 +150,12 @@ const CreateCard: React.FC<ICreateCard> = (props: ICreateCard): JSX.Element => {
         setImgUrl('');
         setTags([]);
         setTagEntry('');
-        axios.post(`${process.env.REACT_APP_API_URI}/shares/`, formData).then(response => {
+    }
+    const submitForm = (e: SyntheticEvent) => {
+        e.preventDefault();
+        const formData: ICard = {title, teaser, content, link, img_url, tags};
+        clearEntry();
+        axios.post(`${process.env.REACT_APP_API_URI}/shares/`, formData).then(() => {
             dispatch(fetchCardsAsync())
         }).catch(error => {
             console.log(error);
@@ -159,7 +163,6 @@ const CreateCard: React.FC<ICreateCard> = (props: ICreateCard): JSX.Element => {
 
         exitForm();
     }
-
     const handleTagEntry = (e: SyntheticEvent) => {
         if (e.nativeEvent instanceof InputEvent) { // Just making typescript happy - TODO clean this up
             if (e.nativeEvent.data === ' ') {
