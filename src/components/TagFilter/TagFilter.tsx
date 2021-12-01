@@ -1,8 +1,7 @@
 import React, { SyntheticEvent, useEffect, useState } from 'react'
 import styled from 'styled-components';
-import { useAppSelector, useAppDispatch } from '../../app/hooks';
-import { filter, selectCards } from '../../features/cards/cardSlice';
-import { ICard } from '../Card/Card';
+import { useAppDispatch } from '../../app/hooks';
+import { filter } from '../../features/cards/cardSlice';
 
 const TagFilterInput = styled.input`
     width: max(30%, 300px);

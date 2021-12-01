@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components';
-import { ICard } from '../Card/Card';
 
 import CreateCard from '../CreateCard/CreateCard';
 import TagFilter from '../TagFilter/TagFilter';

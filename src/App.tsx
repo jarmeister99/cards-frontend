@@ -1,25 +1,12 @@
-import { useState, useEffect } from 'react';
 import { Helmet } from "react-helmet";
 
-import { ICard } from './components/Card/Card';
 import ControlPanel from './components/ControlPanel/ControlPanel';
 import CardGallery from './components/CardGallery/CardGallery';
 
-import axios from 'axios';
 
 import './app.scss'
 
 function App() {
-  const [cards, setCards] = useState<ICard[]>([]);
-
-  useEffect(() => {
-    axios.get(`${process.env.REACT_APP_API_URI}/shares/`).then(response => {
-      setCards(response.data)
-    }).catch(error => {
-      console.log(error);
-    })
-  }, []);
-
   return (
     <div className="App">
       <Helmet>

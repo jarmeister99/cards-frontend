@@ -2,8 +2,8 @@ import axios from 'axios';
 import React, { SyntheticEvent, useRef, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import styled from 'styled-components';
-import { useAppSelector, useAppDispatch } from '../../app/hooks';
-import { fetchCardsAsync, selectCards } from '../../features/cards/cardSlice';
+import { useAppDispatch } from '../../app/hooks';
+import { fetchCardsAsync } from '../../features/cards/cardSlice';
 import { ICard } from '../Card/Card';
 
 import { PaleVioletButton } from '../Generic/Buttons/Buttons';
@@ -65,7 +65,6 @@ const CreateCardForm = styled.form`
 `;
 
 const CreateCard: React.FC<ICreateCard> = (props: ICreateCard): JSX.Element => {
-    const cards: ICard[] = useAppSelector(selectCards);
     const dispatch = useAppDispatch();
     const [formActive, setFormActive] = useState<Boolean>(false);
     const createPopupContainer = useRef<HTMLDivElement>(null);
