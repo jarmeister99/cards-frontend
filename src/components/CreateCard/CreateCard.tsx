@@ -2,6 +2,8 @@ import axios from 'axios';
 import React, { SyntheticEvent, useRef, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import styled from 'styled-components';
+import { useAppSelector, useAppDispatch } from '../../app/hooks';
+import { fetchCardsAsync, selectCards } from '../../features/cards/cardSlice';
 import { ICard } from '../Card/Card';
 
 import { PaleVioletButton } from '../Generic/Buttons/Buttons';
@@ -9,8 +11,7 @@ import '../Generic/Buttons/Buttons.scss';
 import './CreateCard.scss';
 
 interface ICreateCard {
-    cards: ICard[];
-    setCards: React.Dispatch<React.SetStateAction<ICard[]>>
+
 }
 
 interface Point {
@@ -64,6 +65,8 @@ const CreateCardForm = styled.form`
 `;
 
 const CreateCard: React.FC<ICreateCard> = (props: ICreateCard): JSX.Element => {
+    const cards: ICard[] = useAppSelector(selectCards);
+    const dispatch = useAppDispatch();
     const [formActive, setFormActive] = useState<Boolean>(false);
     const createPopupContainer = useRef<HTMLDivElement>(null);
     const startTouchPos = useRef<Point>({ x: 0, y: 0 });
@@ -149,15 +152,7 @@ const CreateCard: React.FC<ICreateCard> = (props: ICreateCard): JSX.Element => {
         setTags([]);
         setTagEntry('');
         axios.post(`${process.env.REACT_APP_API_URI}/shares/`, formData).then(response => {
-            const createdCard: ICard = {
-                title: response.data.title,
-                teaser: response.data.teaser,
-                content: response.data.content,
-                link: response.data.link,
-                img_url: response.data.img_url,
-                tags: response.data.tags
-            }
-            props.setCards([...props.cards, createdCard])
+            dispatch(fetchCardsAsync())
         }).catch(error => {
             console.log(error);
         })

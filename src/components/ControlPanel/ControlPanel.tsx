@@ -6,8 +6,6 @@ import CreateCard from '../CreateCard/CreateCard';
 import TagFilter from '../TagFilter/TagFilter';
 
 interface IControlPanel {
-    cards: ICard[];
-    setCards: React.Dispatch<React.SetStateAction<ICard[]>>
 }
 
 const ControlPanelContainer = styled.div`
@@ -24,8 +22,8 @@ const ControlPanelContainer = styled.div`
 const ControlPanel: React.FC<IControlPanel> = (props: IControlPanel): JSX.Element => {
     return (
         <ControlPanelContainer>
-            <TagFilter/>
-            <CreateCard cards={props.cards} setCards={props.setCards} />
+            <TagFilter />
+            <CreateCard />
         </ControlPanelContainer>
     )
 }
