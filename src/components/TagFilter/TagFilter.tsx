@@ -1,7 +1,8 @@
 import React, { SyntheticEvent, useEffect, useState } from 'react'
 import styled from 'styled-components';
 import { useAppDispatch } from '../../app/hooks';
-import { filter } from '../../features/cards/cardSlice';
+import { fetchCardsAsync, filter } from '../../features/cards/cardSlice';
+import TagDisplay from '../TagDisplay/TagDisplay';
 
 const TagFilterInput = styled.input`
     width: max(30%, 300px);
@@ -21,12 +22,15 @@ interface ITagFilter {
 const TagFilter: React.FC<ITagFilter> = (props: ITagFilter): JSX.Element => {
     const [tagEntry, setTagEntry] = useState<string>('');
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
-    
+
     const dispatch = useAppDispatch();
-  
+
     // filter cards based on selected tags every time they change
     useEffect(() => {
-      dispatch(filter(selectedTags))
+        console.log(selectedTags)
+        dispatch(fetchCardsAsync()).then(() => {
+            dispatch(filter(selectedTags))
+        })
     }, [dispatch, selectedTags])  // dispatch is guaranteed to be stable and does not need to be included here. 
 
     // TODO: this is duplicate code from createcard - fix that.
@@ -49,9 +53,7 @@ const TagFilter: React.FC<ITagFilter> = (props: ITagFilter): JSX.Element => {
     return (
         <>
             <TagFilterInput onChange={handleTagEntry} value={tagEntry}></TagFilterInput>
-            <div style={{ display: "flex", justifyContent: "space-evenly", marginTop: "1em" }}>
-                {selectedTags.map(t => <span key={t}>{t}</span>)}
-            </div>
+            <TagDisplay tags={selectedTags} setTags={setSelectedTags} />
         </>
     )
 }
