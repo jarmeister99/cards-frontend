@@ -35,7 +35,7 @@ const TagFilter: React.FC<ITagFilter> = (props: ITagFilter): JSX.Element => {
         if (e.nativeEvent instanceof InputEvent) { // Just making typescript happy - TODO clean this up
             if (e.nativeEvent.data === ' ') {
                 if (!(selectedTags.includes(tagEntry) || tagEntry === '')) {
-                    setSelectedTags([...selectedTags, tagEntry]);
+                    setSelectedTags([...selectedTags, tagEntry.toLowerCase()]);
                     setTagEntry('');
                 }
                 else {
