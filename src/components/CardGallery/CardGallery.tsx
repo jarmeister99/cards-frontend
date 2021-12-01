@@ -22,7 +22,7 @@ const CardGallery: React.FC<ICardGallery> = (props: ICardGallery): JSX.Element =
     }, [dispatch])  // dispatch is guaranteed to be stable and does not need to be included here. 
     return (
         <CardGalleryLayout>
-            {cards.map(c => <Card key={c._id?.$oid} title={c.title} teaser={c.teaser} link={c.link} content={c.content} tags={c.tags} img_url={c.img_url} />)}
+            {cards.map(c => <Card key={c._id?.$oid} _id={c._id} title={c.title} teaser={c.teaser} link={c.link} content={c.content} tags={c.tags} img_url={c.img_url} />)}
         </CardGalleryLayout>
     )
 }

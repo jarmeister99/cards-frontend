@@ -27,7 +27,6 @@ const TagFilter: React.FC<ITagFilter> = (props: ITagFilter): JSX.Element => {
 
     // filter cards based on selected tags every time they change
     useEffect(() => {
-        console.log(selectedTags)
         dispatch(fetchCardsAsync()).then(() => {
             dispatch(filter(selectedTags))
         })

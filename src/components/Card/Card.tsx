@@ -3,6 +3,9 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import './Card.scss'
 import { useMediaQuery } from 'react-responsive';
+import axios from 'axios';
+import { fetchCardsAsync } from '../../features/cards/cardSlice';
+import { useAppDispatch } from '../../app/hooks';
 
 export interface ICard {
     title: string;
@@ -15,6 +18,7 @@ export interface ICard {
 };
 interface ICardBack {
     content: string;
+    _id?: {$oid: string};
 };
 interface ICardFront {
     img_url: string;
@@ -145,7 +149,7 @@ const Card: React.FC<ICard> = (props: ICard): JSX.Element => {
             onMouseEnter={flip} 
             onMouseLeave={flip}>
                 <Front img_url={props.img_url} title={props.title} teaser={props.teaser} tags={props.tags}/>
-                <Back content={props.content}/>
+                <Back content={props.content} _id={props._id}/>
             </CardContainer>
         )
     }
@@ -158,7 +162,7 @@ const Card: React.FC<ICard> = (props: ICard): JSX.Element => {
             onTouchMove={trackSwipe}
             ref={mobileCardContainer}>
                 <Front img_url={props.img_url} title={props.title} teaser={props.teaser} tags={props.tags}/>
-                <Back content={props.content}/>
+                <Back content={props.content} _id={props._id}/>
             </CardContainer>  
         )
     }
@@ -176,11 +180,23 @@ const Front: React.FC<ICardFront> = (props: ICardFront): JSX.Element => {
     )
 }
 const Back: React.FC<ICardBack> = (props: ICardBack): JSX.Element => {
+    // allow modifying global state
+    const dispatch = useAppDispatch();
+    const deleteCard = (e: SyntheticEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        axios.delete(`${process.env.REACT_APP_API_URI}/shares/${props._id?.$oid}`).then(() => {
+            dispatch(fetchCardsAsync())
+        }).catch(error => {
+            console.log(error);
+        })
+    }
     return (
         <div className="back">
             <ContentContainer>
                 {props.content}
             </ContentContainer>
+            <button style={{position: "absolute", bottom: "1em", right: "1em"}} onClick={deleteCard}>Delete</button>
         </div>
     )
 }
