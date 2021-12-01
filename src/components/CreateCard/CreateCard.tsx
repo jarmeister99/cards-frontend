@@ -8,6 +8,7 @@ import { ICard } from '../Card/Card';
 
 import { PaleVioletButton } from '../Generic/Buttons/Buttons';
 import '../Generic/Buttons/Buttons.scss';
+import TagDisplay from '../TagDisplay/TagDisplay';
 import './CreateCard.scss';
 
 interface ICreateCard {
@@ -201,10 +202,8 @@ const CreateCard: React.FC<ICreateCard> = (props: ICreateCard): JSX.Element => {
                     <input value={img_url} onChange={e => setImgUrl(e.target.value)}></input>
                     <label>(Optional) Tags</label>
                     <input value={tag_entry} onChange={handleTagEntry}></input>
+                    <TagDisplay tags={tags} setTags={setTags} />
                     <PaleVioletButton primary={true} className="expand" onClick={submitForm}>Submit</PaleVioletButton>
-                    <div style={{ display: "flex", justifyContent: "space-evenly" }}>
-                        {tags.map(t => <span key={t}>{t}</span>)}
-                    </div>
                 </CreateCardForm>
             </div>
             <CreateCardContainer>
