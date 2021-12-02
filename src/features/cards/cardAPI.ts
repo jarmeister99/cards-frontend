@@ -1,5 +1,5 @@
 import axios from 'axios'
 
 export const fetchCards = () => {
-  return axios.get('https://share.jaredfoster.dev/api/shares/')
+  return axios.get(`${process.env.REACT_APP_API_URI}shares/`)
 }
